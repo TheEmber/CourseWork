@@ -1,43 +1,34 @@
 @{
     ViewData["Title"] = "Sign Up";
 }
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sign Up</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-</head>
+@model CourseWork.Models.RegisterModel
+
 <body>
     <div class="container">
         <h2 class="text-center my-4">Реєстрація</h2>
-        <form class="row g-3">
+        <form class="row g-3" asp-action="Signup" asp-controller="Account" method="post">
             <div class="col-md-6">
                 <label for="inputName" class="form-label">Ім'я</label>
-                <input type="text" class="form-control" id="inputName" required>
+                <input type="text" class="form-control" id="inputName" asp-for="Name" required>
             </div>
             <div class="col-md-6">
                 <label for="inputSurname" class="form-label">Прізвище</label>
-                <input type="text" class="form-control" id="inputSurname" required>
+                <input type="text" class="form-control" id="inputSurname" asp-for="Surname" required>
             </div>
             <div class="col-md-6">
                 <label for="inputEmail4" class="form-label">Email</label>
-                <input type="email" class="form-control" id="inputEmail4" placeholder="example@domain.com" required>
+                <input type="email" class="form-control" id="inputEmail4" placeholder="example@domain.com" asp-for="Email" required>
             </div>
             <div class="col-md-6">
                 <label for="inputPassword4" class="form-label">Пароль</label>
-                <input type="password" class="form-control" id="inputPassword4" required>
+                <input type="password" class="form-control" id="inputPassword4" asp-for="Password" required>
             </div>
             <div class="col-md-6">
                 <label for="inputPassword4Confirm" class="form-label">Підтвердіть пароль</label>
-                <input type="password" class="form-control" id="inputPassword4Confirm" required>
+                <input type="password" class="form-control" id="inputPassword4Confirm" asp-for="ConfirmPassword" required>
             </div>
             <div class="col-12 text-center">
-                <a asp-controller="Home" asp-action="Login" class="my-2">Вже маєте обліковий запис? Увійти.</a>
+                <a asp-controller="Home" asp-action="Signup" class="my-2">Вже маєте обліковий запис? Увійти.</a>
                 <button type="submit" class="btn btn-primary">Зареєструватися</button>
             </div>
         </form>

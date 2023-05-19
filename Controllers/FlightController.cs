@@ -5,6 +5,7 @@ using Microsoft.Data.Sqlite;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using CourseWork.Data;
+using Microsoft.AspNetCore.Authorization;
 
 namespace CourseWork.Controllers;
 
@@ -30,6 +31,7 @@ public class FlightController : Controller
         return View(flightsWithCount);
     }
 
+    [Authorize]
     public IActionResult Details(Guid FlightId)
     {
         Flight flight = _context.Flights.FirstOrDefault(f => f.ID == FlightId);

@@ -9,10 +9,12 @@ public class ApplicationDbContext : DbContext
     public DbSet<Flight> Flights { get; set; }
     public DbSet<Ticket> Tickets { get; set; }
     public DbSet<User> Users { get; set; }
+    public DbSet<Role> Roles { get; set; }
 
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
         : base(options)
     {
+        Database.EnsureCreated();
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -40,13 +42,23 @@ public class ApplicationDbContext : DbContext
 
         modelBuilder.Entity<User>()
             .HasKey(u => u.ID);
+
+        modelBuilder.Entity<User>()
+            .HasOne(u => u.Role)
+            .WithMany(r => r.Users)
+            .IsRequired(true)
+            .OnDelete(DeleteBehavior.NoAction);
+
+        modelBuilder.Entity<Role>()
+            .HasKey(r => r.ID);
+
     }
     public static void SeedData(IServiceProvider serviceProvider)
         {
             using (var context = new ApplicationDbContext(serviceProvider.GetRequiredService<DbContextOptions<ApplicationDbContext>>()))
             {
                 // Check if data already exists
-                if (context.Flights.Any() || context.Users.Any() || context.Tickets.Any())
+                if (context.Flights.Any() || context.Users.Any() || context.Tickets.Any() || context.Roles.Any())
                 {
                     return; // Data already seeded
                 }
@@ -78,26 +90,33 @@ public class ApplicationDbContext : DbContext
                 context.Flights.AddRange(flights);
                 context.SaveChanges();
 
+                
+                // Add sample roles
+                var roles = new[]
+                {
+                    new Role
+                    {
+                        Name = "User"
+                    },
+                    new Role
+                    {
+                        Name = "Manager"
+                    },
+                    new Role
+                    {
+                        Name = "Admin"
+                    }
+                };
+
+                context.Roles.AddRange(roles);
+                context.SaveChanges();
+
                 // Add sample users
+                var userRole = context.Roles.Single(r => r.Name == "User");
                 var users = new[]
                 {
-                    new User
-                    {
-                        ID = Guid.NewGuid(),
-                        Email = "user1@example.com",
-                        Password = "password1",
-                        Name = "John",
-                        Surname = "Doe"
-                    },
-                    new User
-                    {
-                        ID = Guid.NewGuid(),
-                        Email = "user2@example.com",
-                        Password = "password2",
-                        Name = "Jane",
-                        Surname = "Smith"
-                    },
-                    // Add more users as needed
+                    User.RegisterUser("user1@example.com", "password1", "name1", "surname1", userRole),
+                    User.RegisterUser("user2@example.com", "password2", "name2", "surname2", userRole)
                 };
 
                 context.Users.AddRange(users);
@@ -110,13 +129,13 @@ public class ApplicationDbContext : DbContext
                     {
                         Seat = 1,
                         FlightID = flights[0].ID,
-                        BookedBy = users[0].ID
+                        BookedBy = null
                     },
                     new Ticket
                     {
                         Seat = 2,
                         FlightID = flights[1].ID,
-                        BookedBy = users[1].ID
+                        BookedBy = null
                     },
                     // Add more tickets as needed
                 };

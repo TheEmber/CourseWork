@@ -13,7 +13,7 @@ public class LoginModel
     public String Password { get; set; }
 }
 
-public class RegisterMode
+public class RegisterModel
 {
     [Required]
     [EmailAddress]
@@ -24,4 +24,8 @@ public class RegisterMode
     [DataType(DataType.Password)]
     [Compare("Password", ErrorMessage = "Паролі не співпадають.")]
     public string ConfirmPassword { get; set; }
+    [Required]
+    public string Name { get; set; }
+    [Required]
+    public string Surname { get; set; }
 }

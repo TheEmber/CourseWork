@@ -2,3 +2,8 @@
 /Flight.db
 /Flight.db-shm
 /Flight.db-wal
+out
+.vscode/settings.json
+bin
+obj
+Migrations

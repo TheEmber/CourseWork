@@ -6,18 +6,6 @@
             "driver": "SQLite",
             "name": "Flight",
             "database": "${workspaceFolder:CourseWork}/Flight.db"
-        },
-        {
-            "previewLimit": 50,
-            "driver": "SQLite",
-            "name": "Flight1",
-            "database": "${workspaceFolder:CourseWork}/Flight.db-shm"
-        },
-        {
-            "previewLimit": 50,
-            "driver": "SQLite",
-            "name": "Flight2",
-            "database": "${workspaceFolder:CourseWork}/Flight.db-wal"
         }
     ]
 }
