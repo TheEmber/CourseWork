@@ -1,0 +1,59 @@
+@{
+    ViewData["Title"] = "Tickets";
+}
+@model Flight
+
+<div class="container">
+    <h1 class="text-center my-4">Інформація про рейс</h1>
+    <div>
+        <h3>Місто відправлення:</h3>
+        <p>@Model.Source</p>
+    </div>
+    <div>
+        <h3>Місто прибуття:</h3>
+        <p>@Model.Destination</p>
+    </div>
+    <div>
+        <h3>Час відправлення:</h3>
+        <p>@Model.DepartureDate.ToString("dd/MM/yyyy HH:mm")</p>
+    </div>
+    <div>
+        <h3>Час прибуття:</h3>
+        <p>@Model.ArrivalDate.ToString("dd/MM/yyyy HH:mm")</p>
+    </div>
+    <div>
+        <h3>Ціна:</h3>
+        <p>@Model.Price ₴</p>
+    </div>
+    <div>
+        <h3>Виберіть місця:</h3>
+        <div>
+            @foreach (var ticket in Model.Tickets)
+            {
+                <button class="btn btn-outline-primary m-2 seat-button" data-seat="@ticket.Seat" onclick="selectSeat(this)">@ticket.Seat</button>
+            }
+        </div>
+    </div>
+    <div>
+        <button class="btn btn-primary" onclick="bookSeats()">Забронювати</button>
+    </div>
+</div>
+
+<script>
+    var selectedSeats = [];
+
+    function selectSeat(button) {
+        var seatNumber = button.getAttribute("data-seat");
+        var index = selectedSeats.indexOf(seatNumber);
+        if (index === -1) {
+            // Місце ще не вибране, додати до списку вибраних місць
+            selectedSeats.push(seatNumber);
+            button.classList.add("selected");
+        } else {
+            // Місце вже вибране, видалити зі списку вибраних місць
+            selectedSeats.splice(index, 1);
+            button.classList.remove("selected");
+        }
+        console.log(selectedSeats);
+    }
+</script>

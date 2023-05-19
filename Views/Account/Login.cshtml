@@ -1,0 +1,21 @@
+@{
+    ViewData["Title"] = "Sign Up";
+}
+@model CourseWork.Models.LoginModel
+
+<form class="row g-3" asp-action="Login" asp-controller="Account" method="post">
+  </div>
+    <div class="col-md-6">
+    <label for="inputEmail4" class="form-label">Email</label>
+    <input type="email" class="form-control" id="inputEmail4" placeholder="example@domain.com" asp-for="Email">
+  </div>
+  <div class="col-md-6">
+    <label for="inputPassword4" class="form-label">Пароль</label>
+    <input type="password" class="form-control" id="inputPassword4" asp-for="Password">
+  </div>
+<a asp-controller="Home" asp-action="Signup">Не зареєстровані? Зробіть це зараз!</a>
+<a asp-controller="Home" asp-action="Signup">Забули пароль?</a>
+  <div class="col-12">
+    <button type="submit" class="btn btn-primary" value="Login">Увійти</button>
+  </div>
+</form>
