@@ -1,23 +1,33 @@
 @{
     ViewData["Title"] = "Профіль";
 }
+@model CourseWork.Models.User
 
 <div class="mb-3 row">
     <label for="staticEmail" class="col-sm-2 col-form-label" style="font-weight: bold;">Email</label>
     <div class="col-sm-10">
-        <input type="text" readonly class="form-control-plaintext" id="staticEmail" value="example@gmail.com" style="font-weight: bold;">
-    </div>
-</div>
-<div class="mb-3 row">
-    <label for="staticEmail" class="col-sm-2 col-form-label" style="font-weight: bold;">Прізвище</label>
-    <div class="col-sm-10">
-        <input type="text" readonly class="form-control-plaintext" id="staticName" value="Example" style="font-weight: bold;">
+        <input type="text" readonly class="form-control-plaintext" id="staticEmail" value=@Model.Email style="font-weight: bold;">
     </div>
 </div>
 <div class="mb-3 row">
     <label for="staticEmail" class="col-sm-2 col-form-label" style="font-weight: bold;">Ім'я</label>
     <div class="col-sm-10">
-        <input type="text" readonly class="form-control-plaintext" id="staticSurname" value="Example" style="font-weight: bold;">
+        <input type="text" readonly class="form-control-plaintext" id="staticName" value=@Model.Name style="font-weight: bold;">
     </div>
 </div>
-<a asp-controller="Home" asp-action="Login" style="color: #007bff; font-family: 'Arial', sans-serif; font-size: 16px;">Змінити пароль.</a>
+<div class="mb-3 row">
+    <label for="staticEmail" class="col-sm-2 col-form-label" style="font-weight: bold;">Прізвище</label>
+    <div class="col-sm-10">
+        <input type="text" readonly class="form-control-plaintext" id="staticSurname" value=@Model.Surname style="font-weight: bold;">
+    </div>
+</div>
+@if (Model.RoleID != 1)
+{
+    <div class="mb-3 row">
+        <label for="staticEmail" class="col-sm-2 col-form-label" style="font-weight: bold;">Роль</label>
+        <div class="col-sm-10">
+            <input type="text" readonly class="form-control-plaintext" id="staticSurname" value=@Model.Role.Name style="font-weight: bold;">
+        </div>
+    </div>
+}
+<a asp-controller="Home" asp-action="Login" style="color: #007bff; font-family: 'Arial', sans-serif; font-size: 16px;">Змінити пароль</a>

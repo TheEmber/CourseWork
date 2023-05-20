@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 
 namespace CourseWork.Controllers;
 
@@ -79,12 +80,25 @@ public class AccountController : Controller
     {
         var claims = new List<Claim>
         {
-            new Claim(ClaimsIdentity.DefaultNameClaimType, user.Email),
+            new Claim(ClaimsIdentity.DefaultNameClaimType, user.ID.ToString()),
             new Claim(ClaimsIdentity.DefaultRoleClaimType, user.Role?.Name)
         };
         ClaimsIdentity id = new(claims, CookieAuthenticationDefaults.AuthenticationScheme, ClaimsIdentity.DefaultNameClaimType,
             ClaimsIdentity.DefaultRoleClaimType);
         await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(id));
+    }
+
+    [Authorize]
+    public async Task<IActionResult> Details()
+    {
+        string userId = HttpContext.User.FindFirst(ClaimsIdentity.DefaultNameClaimType)?.Value;
+        
+        User user = await _context.Users
+        .Include(u => u.Role)
+        .SingleOrDefaultAsync(u => u.ID == Guid.Parse(userId));
+        
+        return View(user);
+        
     }
 
     public async Task<IActionResult> Logout()

@@ -31,7 +31,6 @@ public class FlightController : Controller
         return View(flightsWithCount);
     }
 
-    [Authorize]
     public IActionResult Details(Guid FlightId)
     {
         Flight flight = _context.Flights.FirstOrDefault(f => f.ID == FlightId);
