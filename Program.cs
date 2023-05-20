@@ -8,33 +8,25 @@ using Microsoft.Data.Sqlite;
 using Microsoft.AspNetCore.Identity;
 using CourseWork.Data;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using CourseWork;
 
 var builder = WebApplication.CreateBuilder(args);
-
-// Initialize global variables
-CourseWork.GlobalVariables.DbPath = builder.Configuration.GetConnectionString("LocalDb");
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
 
 // Configure database services
-builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlite(CourseWork.GlobalVariables.DbPath));
+builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlite(builder.Configuration.GetConnectionString("LocalDb")));
     using (var serviceProvider = builder.Services.BuildServiceProvider())
     {
         serviceProvider.GetRequiredService<ApplicationDbContext>().Database.Migrate();
         ApplicationDbContext.SeedData(serviceProvider);
     }
 
-// Configure identity service
-builder.Services.AddIdentity<IdentityUser, IdentityRole>()
-    .AddEntityFrameworkStores<ApplicationDbContext>()
-    .AddDefaultUI()
-    .AddDefaultTokenProviders();
-
 // Configure authentication cookie service
-builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-    .AddCookie(options =>
+builder.Services.AddAuthentication(GlobalVariables.AuthTypeScheme)
+    .AddCookie(GlobalVariables.AuthTypeScheme, options =>
     {
         options.Cookie.Name = "TickNTripCookie";
         options.Cookie.HttpOnly = true;
