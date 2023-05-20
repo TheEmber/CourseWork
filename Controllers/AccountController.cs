@@ -83,9 +83,9 @@ public class AccountController : Controller
             new Claim(ClaimsIdentity.DefaultNameClaimType, user.Email),
             new Claim(ClaimsIdentity.DefaultRoleClaimType, user.Role?.Name)
         };
-        ClaimsIdentity id = new(claims, GlobalVariables.AuthTypeScheme, ClaimsIdentity.DefaultNameClaimType,
+        ClaimsIdentity id = new(claims, CookieAuthenticationDefaults.AuthenticationScheme, ClaimsIdentity.DefaultNameClaimType,
             ClaimsIdentity.DefaultRoleClaimType);
-        await HttpContext.SignInAsync(GlobalVariables.AuthTypeScheme, new ClaimsPrincipal(id));
+        await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(id));
     }
 
     [HttpPost]

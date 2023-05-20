@@ -25,8 +25,8 @@ builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlite
     }
 
 // Configure authentication cookie service
-builder.Services.AddAuthentication(GlobalVariables.AuthTypeScheme)
-    .AddCookie(GlobalVariables.AuthTypeScheme, options =>
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
     {
         options.Cookie.Name = "TickNTripCookie";
         options.Cookie.HttpOnly = true;
