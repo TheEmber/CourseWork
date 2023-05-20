@@ -1,33 +1,61 @@
 @{
     ViewData["Title"] = "Профіль";
 }
-@model CourseWork.Models.User
+@model CourseWork.UserProfileViewModel
 
 <div class="mb-3 row">
     <label for="staticEmail" class="col-sm-2 col-form-label" style="font-weight: bold;">Email</label>
     <div class="col-sm-10">
-        <input type="text" readonly class="form-control-plaintext" id="staticEmail" value=@Model.Email style="font-weight: bold;">
+        <input type="text" readonly class="form-control-plaintext" id="staticEmail" value=@Model.User.Email style="font-weight: bold;">
     </div>
 </div>
 <div class="mb-3 row">
     <label for="staticEmail" class="col-sm-2 col-form-label" style="font-weight: bold;">Ім'я</label>
     <div class="col-sm-10">
-        <input type="text" readonly class="form-control-plaintext" id="staticName" value=@Model.Name style="font-weight: bold;">
+        <input type="text" readonly class="form-control-plaintext" id="staticName" value=@Model.User.Name style="font-weight: bold;">
     </div>
 </div>
 <div class="mb-3 row">
     <label for="staticEmail" class="col-sm-2 col-form-label" style="font-weight: bold;">Прізвище</label>
     <div class="col-sm-10">
-        <input type="text" readonly class="form-control-plaintext" id="staticSurname" value=@Model.Surname style="font-weight: bold;">
+        <input type="text" readonly class="form-control-plaintext" id="staticSurname" value=@Model.User.Surname style="font-weight: bold;">
     </div>
 </div>
-@if (Model.RoleID != 1)
+@if (Model.User.RoleID != 1)
 {
     <div class="mb-3 row">
         <label for="staticEmail" class="col-sm-2 col-form-label" style="font-weight: bold;">Роль</label>
         <div class="col-sm-10">
-            <input type="text" readonly class="form-control-plaintext" id="staticSurname" value=@Model.Role.Name style="font-weight: bold;">
+            <input type="text" readonly class="form-control-plaintext" id="staticSurname" value=@Model.User.Role.Name style="font-weight: bold;">
         </div>
     </div>
 }
-<a asp-controller="Home" asp-action="Login" style="color: #007bff; font-family: 'Arial', sans-serif; font-size: 16px;">Змінити пароль</a>
+
+<a href="#" id="changePasswordLink" style="color: #007bff; font-family: 'Arial', sans-serif; font-size: 16px;">Змінити пароль</a>
+
+<div id="changePasswordForm" style="display: none;">
+    <form asp-action="ChangePassword" asp-controller="Account" method="post">
+        <div class="mb-3">
+            <label for="currentPassword" class="form-label">Поточний пароль</label>
+            <input type="password" class="form-control" id="currentPassword" asp-for="OldPassword">
+        </div>
+        <div class="mb-3">
+            <label for="newPassword" class="form-label">Новий пароль</label>
+            <input type="password" class="form-control" id="newPassword" asp-for="NewPassword">
+        </div>
+        <div class="mb-3">
+            <label for="confirmPassword" class="form-label">Підтвердження паролю</label>
+            <input type="password" class="form-control" id="confirmPassword" asp-for="ConfirmNewPassword">
+        </div>
+        <button type="submit" class="btn btn-primary">Зберегти</button>
+    </form>
+</div>
+
+<script>
+    document.getElementById('changePasswordLink').addEventListener('click', function (event) {
+        event.preventDefault();
+        var form = document.getElementById('changePasswordForm');
+        form.style.display = 'block';
+        form.classList.add('fade-in');
+    });
+</script>

@@ -3,38 +3,6 @@
 }
 @model CourseWork.Models.RegisterModel
 
-@* <body>
-    <div class="container">
-        <h2 class="text-center my-4">Реєстрація</h2>
-        <form class="row g-3" asp-action="Signup" asp-controller="Account" method="post">
-            <div class="col-md-6">
-                <label for="inputName" class="form-label">Ім'я</label>
-                <input type="text" class="form-control" id="inputName" asp-for="Name" required>
-            </div>
-            <div class="col-md-6">
-                <label for="inputSurname" class="form-label">Прізвище</label>
-                <input type="text" class="form-control" id="inputSurname" asp-for="Surname" required>
-            </div>
-            <div class="col-md-6">
-                <label for="inputEmail4" class="form-label">Email</label>
-                <input type="email" class="form-control" id="inputEmail4" placeholder="example@domain.com" asp-for="Email" required>
-            </div>
-            <div class="col-md-6">
-                <label for="inputPassword4" class="form-label">Пароль</label>
-                <input type="password" class="form-control" id="inputPassword4" asp-for="Password" required>
-            </div>
-            <div class="col-md-6">
-                <label for="inputPassword4Confirm" class="form-label">Підтвердіть пароль</label>
-                <input type="password" class="form-control" id="inputPassword4Confirm" asp-for="ConfirmPassword" required>
-            </div>
-            <div class="col-12 text-center">
-                <a asp-controller="Home" asp-action="Signup" class="my-2">Вже маєте обліковий запис? Увійти.</a>
-                <button type="submit" class="btn btn-primary">Зареєструватися</button>
-            </div>
-        </form>
-    </div>
-</body>
-</html> *@
 <form class="row g-3" asp-action="Login" asp-controller="Account" method="post">
     <div class="col-md-6 offset-md-3">
         <label for="inputEmail4" class="form-label">Email</label>

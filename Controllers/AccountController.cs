@@ -16,6 +16,9 @@ namespace CourseWork.Controllers;
 public class AccountController : Controller
 {
     private readonly ApplicationDbContext _context;
+
+    public object UserProfileViewModel { get; private set; }
+
     public AccountController(ApplicationDbContext context)
     {
         _context = context;
@@ -92,13 +95,35 @@ public class AccountController : Controller
     public async Task<IActionResult> Details()
     {
         string userId = HttpContext.User.FindFirst(ClaimsIdentity.DefaultNameClaimType)?.Value;
-        
-        User user = await _context.Users
-        .Include(u => u.Role)
-        .SingleOrDefaultAsync(u => u.ID == Guid.Parse(userId));
-        
-        return View(user);
-        
+        UserProfileViewModel model = new()
+        {
+            User = await _context.Users
+            .Include(u => u.Role)
+            .SingleOrDefaultAsync(u => u.ID == Guid.Parse(userId))
+        };
+
+        return View(model);
+    }
+
+    [HttpPost]
+    [Authorize]
+    public async Task<IActionResult> ChangePassword(UserProfileViewModel model)
+    {
+        if (ModelState.IsValid)
+        {
+            string userId = HttpContext.User.FindFirst(ClaimsIdentity.DefaultNameClaimType)?.Value;
+
+            User user = await _context.Users
+                .SingleOrDefaultAsync(u => u.ID == Guid.Parse(userId));
+            if (user != null && user.VerifyHashedPassword(model.OldPassword))
+            {
+                user.ChangePassword(model.OldPassword, model.NewPassword);
+                await _context.SaveChangesAsync(); 
+                return RedirectToAction("Details", "Account");
+            }
+        }
+        return View();
+        // Error code
     }
 
     public async Task<IActionResult> Logout()

@@ -8,10 +8,7 @@ namespace CourseWork.Models;
 public class User
 {
     public Guid ID { get; set; }
-    [Required]
-    [EmailAddress]
     public String Email { get; set; }
-    [Required]
     public String Password { get; set; }
     public String Name { get; set; }
     public String Surname { get; set; }
@@ -47,7 +44,7 @@ public class User
     {
         return new User(Guid.NewGuid(), email, HashPassword(password), name, surname, 1, role);
     }
-    public static string HashPassword(string password)
+    private static string HashPassword(string password)
     {
         byte[] salt;
         byte[] buffer2;
