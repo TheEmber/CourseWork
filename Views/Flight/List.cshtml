@@ -1,10 +1,10 @@
 @{
-    ViewData["Title"] = "Tickets";
+    ViewData["Title"] = "Рейси";
 }
 
 @model List<FlightWithCount>
 
-<div class="container">
+@* <div class="container">
     <h1 class="text-center my-4">Квитки</h1>
     <input class="form-control mb-3" id="searchInput" type="text" placeholder="Шукати квитки..." oninput="filterFlights()">
 
@@ -47,6 +47,52 @@
                     </form>
 
 
+                </tr>
+            }
+        </tbody>
+    </table>
+</div> *@
+<div class="container">
+    <h1 class="text-center my-4">Квитки</h1>
+    <input class="form-control mb-3" id="searchInput" type="text" placeholder="Шукати квитки..." oninput="filterFlights()">
+
+    <div class="mb-3">
+        <label for="sortSelect" class="form-label">Сортувати за:</label>
+        <select class="form-select" id="sortSelect" onchange="sortFlights()">
+            <option value="arrival">Час прибуття</option>
+            <option value="departure">Час відправлення</option>
+            <option value="price">Ціна</option>
+        </select>
+    </div>
+
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>Відправляється з</th>
+                <th>Прямує до</th>
+                <th>Ціна</th>
+                <th>Відправляється</th>
+                <th>Прибуває</th>
+                <th>Кількість квитків</th>
+                <th>Дії</th>
+            </tr>
+        </thead>
+        <tbody id="flightTable">
+            @foreach (var flight in Model)
+            {
+                <tr>
+                    <td>@flight.Source</td>
+                    <td>@flight.Destination</td>
+                    <td>@flight.Price ₴</td>
+                    <td>@flight.DepartureDate.ToString("dd/MM/yyyy HH:mm")</td>
+                    <td>@flight.ArrivalDate.ToString("dd/MM/yyyy HH:mm")</td>
+                    <td>@flight.TicketCount</td>
+                    <form action="@Url.Action("Details", "Flight")" method="get">
+                        <input type="hidden" name="FlightId" value="@flight.ID" />
+                        <td>
+                            <button type="submit" class="btn btn-primary">Забронювати</button>
+                        </td>
+                    </form>
                 </tr>
             }
         </tbody>

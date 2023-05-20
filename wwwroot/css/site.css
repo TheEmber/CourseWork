@@ -22,3 +22,94 @@ body {
   font-weight: bold;
   color: white;
 }
+
+h1.display-4 {
+  color: #007bff;
+  font-family: 'Arial', sans-serif;
+  font-weight: bold;
+}
+
+input.form-control {
+  border: 2px solid #007bff;
+  border-radius: 10px;
+  padding: 10px;
+  font-size: 18px;
+}
+
+button.btn-primary {
+  background-color: #007bff;
+  border-color: #007bff;
+  font-family: 'Arial', sans-serif;
+  font-weight: bold;
+}
+
+label.form-label {
+  font-weight: bold;
+}
+
+a.my-2 {
+  color: #007bff;
+  font-family: 'Arial', sans-serif;
+  font-size: 16px;
+}
+
+h2.text-center {
+  color: #007bff;
+  font-family: 'Arial', sans-serif;
+  font-weight: bold;
+}
+
+input.form-control {
+  border: 2px solid #007bff;
+  border-radius: 10px;
+  padding: 10px;
+  font-size: 18px;
+}
+
+a.my-2 {
+  color: #007bff;
+  font-family: 'Arial', sans-serif;
+  font-size: 16px;
+}
+
+button.btn-primary {
+  background-color: #007bff;
+  border-color: #007bff;
+  font-family: 'Arial', sans-serif;
+  font-weight: bold;
+}
+
+h1.text-center {
+  color: #007bff;
+  font-family: 'Arial', sans-serif;
+  font-weight: bold;
+}
+
+input.form-control {
+  border: 2px solid #007bff;
+  border-radius: 10px;
+  padding: 10px;
+  font-size: 18px;
+}
+
+select.form-select {
+  border: 2px solid #007bff;
+  border-radius: 10px;
+  padding: 10px;
+  font-size: 18px;
+}
+
+table.table {
+  border: 1px solid #dee2e6;
+}
+
+th {
+  font-weight: bold;
+}
+
+button.btn-primary {
+  background-color: #007bff;
+  border-color: #007bff;
+  font-family: 'Arial', sans-serif;
+  font-weight: bold;
+}

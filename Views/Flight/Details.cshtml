@@ -1,10 +1,10 @@
 @{
-    ViewData["Title"] = "Tickets";
+    ViewData["Title"] = "Деталі рейсу";
 }
 @model Flight
 
 <div class="container">
-    <h1 class="text-center my-4">Інформація про рейс</h1>
+    <h1 class="text-center my-4" style="color: #007bff; font-family: 'Arial', sans-serif; font-weight: bold;">Інформація про рейс</h1>
     <div>
         <h3>Місто відправлення:</h3>
         <p>@Model.Source</p>
@@ -30,12 +30,12 @@
         <div>
             @foreach (var ticket in Model.Tickets)
             {
-                <button class="btn btn-outline-primary m-2 seat-button" data-seat="@ticket.Seat" onclick="selectSeat(this)">@ticket.Seat</button>
+                <button class="btn btn-outline-primary m-2 seat-button" data-seat="@ticket.Seat" onclick="selectSeat(this)" style="border-color: #007bff; color: #007bff; font-family: 'Arial', sans-serif; font-weight: bold;">@ticket.Seat</button>
             }
         </div>
     </div>
     <div>
-        <button class="btn btn-primary" onclick="bookSeats()">Забронювати</button>
+        <button class="btn btn-primary" onclick="bookSeats()" style="background-color: #007bff; border-color: #007bff; font-family: 'Arial', sans-serif; font-weight: bold;">Забронювати</button>
     </div>
 </div>
 

@@ -1,9 +1,9 @@
 @{
-    ViewData["Title"] = "Sign Up";
+    ViewData["Title"] = "Увійти";
 }
 @model CourseWork.Models.LoginModel
 
-<form class="row g-3" asp-action="Login" asp-controller="Account" method="post">
+@* <form class="row g-3" asp-action="Login" asp-controller="Account" method="post">
   </div>
     <div class="col-md-6">
     <label for="inputEmail4" class="form-label">Email</label>
@@ -17,5 +17,24 @@
 <a asp-controller="Home" asp-action="Signup">Забули пароль?</a>
   <div class="col-12">
     <button type="submit" class="btn btn-primary">Увійти</button>
+  </div>
+</form> *@
+<form class="row g-3" asp-action="Login" asp-controller="Account" method="post">
+  <div class="col-md-6 offset-md-3">
+    <label for="inputEmail4" class="form-label" style="font-weight: bold;">Email</label>
+    <input type="email" class="form-control" id="inputEmail4" placeholder="example@domain.com" asp-for="Email" style="border: 2px solid #007bff; border-radius: 10px; padding: 10px; font-size: 18px;">
+  </div>
+  <div class="col-md-6 offset-md-3">
+    <label for="inputPassword4" class="form-label" style="font-weight: bold;">Пароль</label>
+    <input type="password" class="form-control" id="inputPassword4" asp-for="Password" style="border: 2px solid #007bff; border-radius: 10px; padding: 10px; font-size: 18px;">
+  </div>
+  <div class="col-12 text-center mt-3">
+    <a asp-controller="Home" asp-action="Signup" style="color: #007bff; font-family: 'Arial', sans-serif; font-size: 16px;">Не зареєстровані? Зробіть це зараз!</a>
+  </div>
+  <div class="col-12 text-center mt-3">
+    <a asp-controller="Home" asp-action="Signup" style="color: #007bff; font-family: 'Arial', sans-serif; font-size: 16px;">Забули пароль?</a>
+  </div>
+  <div class="col-12 text-center mt-4">
+    <button type="submit" class="btn btn-primary" style="background-color: #007bff; border-color: #007bff; font-family: 'Arial', sans-serif; font-weight: bold;">Увійти</button>
   </div>
 </form>
