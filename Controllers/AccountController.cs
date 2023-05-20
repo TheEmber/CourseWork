@@ -15,8 +15,6 @@ namespace CourseWork.Controllers;
 public class AccountController : Controller
 {
     private readonly ApplicationDbContext _context;
-    private readonly SignInManager<IdentityUser> _signInManager;
-    private readonly UserManager<IdentityUser> _userManager;
     public AccountController(ApplicationDbContext context)
     {
         _context = context;
@@ -72,6 +70,7 @@ public class AccountController : Controller
                 return RedirectToAction("Index", "Home");
             }
             ModelState.AddModelError("", "Невірні логін або пароль");
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
         }
         return View();
     }
@@ -88,10 +87,9 @@ public class AccountController : Controller
         await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(id));
     }
 
-    [HttpPost]
     public async Task<IActionResult> Logout()
     {
-        await _signInManager.SignOutAsync();
-        return RedirectToAction("Index", "Home");
+        await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+        return RedirectToAction("Login", "Account");
     }
 }
