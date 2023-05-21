@@ -1,14 +1,6 @@
 using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using System.Diagnostics;
-using Microsoft.AspNetCore.Mvc;
-using CourseWork.Models;
-using Microsoft.Data.Sqlite;
-using Microsoft.AspNetCore.Identity;
 using CourseWork.Data;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using CourseWork;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -60,4 +52,4 @@ app.MapControllerRoute(
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.Run();
-public partial class Program{} // Used for tests
+public partial class Program { } // Used for tests

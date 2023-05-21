@@ -6,7 +6,7 @@
 <body>
     <div class="container">
         <h2 class="text-center my-4">Реєстрація</h2>
-        <form class="row g-3" asp-action="Signup" asp-controller="Account" method="post">
+        <form class="row g-3 needs-validation" novalidate asp-action="Signup" asp-controller="Account" method="post">
             <div class="col-md-6">
                 <label for="inputName" class="form-label">Ім'я</label>
                 <input type="text" class="form-control" id="inputName" asp-for="Name" required>
@@ -33,5 +33,26 @@
             </div>
         </form>
     </div>
+    <div class="col-md-6 offset-md-3">
+        <div asp-validation-summary="All" class="text-danger"></div>
+    </div>
 </body>
-</html>
+
+
+<script>
+(function () {
+  'use strict'
+  var forms = document.querySelectorAll('.needs-validation')
+  Array.prototype.slice.call(forms)
+    .forEach(function (form) {
+      form.addEventListener('submit', function (event) {
+        if (!form.checkValidity()) {
+          event.preventDefault()
+          event.stopPropagation()
+        }
+
+        form.classList.add('was-validated')
+      }, false)
+    })
+})()
+</script>

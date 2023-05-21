@@ -48,16 +48,16 @@ public class UserModelTest
     [Fact]
     public void GuidGenerationTest()
     {
-        User user1 = new User("hfusdbhu@dfsa.das", "password", "name", "surname");
-        User user2 = new User("hfusdbhu@dfsa.das", "password", "name", "surname");
+        User user1 = new("hfusdbhu@dfsa.das", "password", "name", "surname");
+        User user2 = new("hfusdbhu@dfsa.das", "password", "name", "surname");
 
         Assert.True(user1.ID != user2.ID);
     }
     [Fact]
     public void DefaultRoleTest()
     {
-        User user1 = new User("hfusdbhu@dfsa.das", "password", "name", "surname");
-        User user2 = new User("hfusdbhu@dfsa.das", "password", "name", "surname");
+        User user1 = new("hfusdbhu@dfsa.das", "password", "name", "surname");
+        User user2 = new("hfusdbhu@dfsa.das", "password", "name", "surname");
 
         Assert.True(user1.RoleID == user2.RoleID);
         Assert.True(user1.RoleID == 1);
@@ -65,15 +65,15 @@ public class UserModelTest
     [Fact]
     public void AssignedGuidTest()
     {
-        User user = new User(Guid.Empty, "hfusdbhu@dfsa.das", "password", "name", "surname", 5, null!);
+        User user = new(Guid.Empty, "hfusdbhu@dfsa.das", "password", "name", "surname", 5, null!);
 
         Assert.True(user.ID == Guid.Empty);
     }
     [Fact]
     public void AssignedRoleTest()
     {
-        Role role = new Role();
-        User user = new User(Guid.Empty, "dsjihuy@dsa.dsaa", "password", "name", "surname", role.ID, role);
+        Role role = new();
+        User user = new(Guid.Empty, "dsjihuy@dsa.dsaa", "password", "name", "surname", role.ID, role);
 
         Assert.True(user.RoleID == user.Role.ID);
     }

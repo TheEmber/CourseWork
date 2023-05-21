@@ -114,6 +114,10 @@ button.btn-primary {
   font-weight: bold;
 }
 
+.was-validated .form-control:valid {
+  border-color: #007bff;
+  background-color: white;
+}
 
 @keyframes fade-in {
     0% {

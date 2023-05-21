@@ -1,12 +1,7 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using CourseWork.Models;
-using Microsoft.Data.Sqlite;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using CourseWork.Data;
-using Microsoft.AspNetCore.Authorization;
-
 namespace CourseWork.Controllers;
 
 public class FlightController : Controller

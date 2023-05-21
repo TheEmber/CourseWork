@@ -51,21 +51,19 @@ public class ApplicationDbContext : DbContext
 
         modelBuilder.Entity<Role>()
             .HasKey(r => r.ID);
-
     }
     public static void SeedData(IServiceProvider serviceProvider)
         {
-            using (var context = new ApplicationDbContext(serviceProvider.GetRequiredService<DbContextOptions<ApplicationDbContext>>()))
-            {
-                // Check if data already exists
-                if (context.Flights.Any() || context.Users.Any() || context.Tickets.Any() || context.Roles.Any())
-                {
-                    return; // Data already seeded
-                }
+        using var context = new ApplicationDbContext(serviceProvider.GetRequiredService<DbContextOptions<ApplicationDbContext>>());
+        // Check if data already exists
+        if (context.Flights.Any() || context.Users.Any() || context.Tickets.Any() || context.Roles.Any())
+        {
+            return; // Data already seeded
+        }
 
-                // Add sample flights
-                var flights = new[]
-                {
+        // Add sample flights
+        var flights = new[]
+        {
                     new Flight
                     {
                         ID = Guid.NewGuid(),
@@ -87,13 +85,12 @@ public class ApplicationDbContext : DbContext
                     // Add more flights as needed
                 };
 
-                context.Flights.AddRange(flights);
-                context.SaveChanges();
+        context.Flights.AddRange(flights);
+        context.SaveChanges();
 
-                
-                // Add sample roles
-                var roles = new[]
-                {
+        // Add sample roles
+        var roles = new[]
+        {
                     new Role
                     {
                         Name = "User"
@@ -108,23 +105,23 @@ public class ApplicationDbContext : DbContext
                     }
                 };
 
-                context.Roles.AddRange(roles);
-                context.SaveChanges();
+        context.Roles.AddRange(roles);
+        context.SaveChanges();
 
-                // Add sample users
-                var userRole = context.Roles.Single(r => r.Name == "User");
-                var users = new[]
-                {
+        // Add sample users
+        var userRole = context.Roles.Single(r => r.Name == "User");
+        var users = new[]
+        {
                     User.RegisterUser("user1@example.com", "password1", "name1", "surname1", userRole),
                     User.RegisterUser("user2@example.com", "password2", "name2", "surname2", userRole)
                 };
 
-                context.Users.AddRange(users);
-                context.SaveChanges();
+        context.Users.AddRange(users);
+        context.SaveChanges();
 
-                // Add sample tickets
-                var tickets = new[]
-                {
+        // Add sample tickets
+        var tickets = new[]
+        {
                     new Ticket
                     {
                         Seat = 1,
@@ -140,8 +137,7 @@ public class ApplicationDbContext : DbContext
                     // Add more tickets as needed
                 };
 
-                context.Tickets.AddRange(tickets);
-                context.SaveChanges();
-            }
-        }
+        context.Tickets.AddRange(tickets);
+        context.SaveChanges();
+    }
 }

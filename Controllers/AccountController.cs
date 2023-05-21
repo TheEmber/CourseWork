@@ -1,14 +1,10 @@
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using CourseWork.Models;
 using CourseWork.Data;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
-using System.Collections.Generic;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 
 namespace CourseWork.Controllers;
@@ -16,9 +12,6 @@ namespace CourseWork.Controllers;
 public class AccountController : Controller
 {
     private readonly ApplicationDbContext _context;
-
-    public object UserProfileViewModel { get; private set; }
-
     public AccountController(ApplicationDbContext context)
     {
         _context = context;
@@ -49,10 +42,9 @@ public class AccountController : Controller
             }
             else
             {
-                ModelState.AddModelError("", "Логін або пароль введені некорректно");
+                ModelState.AddModelError("", "Обліковий запис з вказаною електронною поштою вже існує");
             }
         }
-
         return View(model);
     }
 
@@ -71,12 +63,12 @@ public class AccountController : Controller
             if (user != null && user.VerifyHashedPassword(model.Password))
             {
                 await Authenticate(user);
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Details", "Account");
             }
-            ModelState.AddModelError("", "Невірні логін або пароль");
+            ModelState.AddModelError("", "Невірно введені електронна пошта або пароль");
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
         }
-        return View();
+        return View(model);
     }
 
     private async Task Authenticate(User user)
@@ -94,14 +86,13 @@ public class AccountController : Controller
     [Authorize]
     public async Task<IActionResult> Details()
     {
-        string userId = HttpContext.User.FindFirst(ClaimsIdentity.DefaultNameClaimType)?.Value;
+        string? userId = HttpContext.User.FindFirst(ClaimsIdentity.DefaultNameClaimType)?.Value;
         UserProfileViewModel model = new()
         {
             User = await _context.Users
             .Include(u => u.Role)
             .SingleOrDefaultAsync(u => u.ID == Guid.Parse(userId))
         };
-
         return View(model);
     }
 
@@ -118,12 +109,12 @@ public class AccountController : Controller
             if (user != null && user.VerifyHashedPassword(model.OldPassword))
             {
                 user.ChangePassword(model.OldPassword, model.NewPassword);
-                await _context.SaveChangesAsync(); 
-                return RedirectToAction("Details", "Account");
+                await _context.SaveChangesAsync();
+                await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+                return RedirectToAction("Logout");
             }
         }
         return View();
-        // Error code
     }
 
     public async Task<IActionResult> Logout()

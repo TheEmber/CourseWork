@@ -1,7 +1,6 @@
 ﻿using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using CourseWork.Models;
-using Microsoft.Data.Sqlite;
 
 namespace CourseWork.Controllers;
 

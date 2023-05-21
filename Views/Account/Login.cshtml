@@ -1,24 +1,46 @@
 @{
-    ViewData["Title"] = "Увійти";
+ViewData["Title"] = "Увійти";
 }
 @model CourseWork.Models.LoginModel
 
-<form class="row g-3" asp-action="Login" asp-controller="Account" method="post">
+<form class="row g-3 needs-validation" novalidate asp-action="Login" asp-controller="Account" method="post">
   <div class="col-md-6 offset-md-3">
     <label for="inputEmail4" class="form-label" style="font-weight: bold;">Email</label>
-    <input type="email" class="form-control" id="inputEmail4" placeholder="example@domain.com" asp-for="Email" style="border: 2px solid #007bff; border-radius: 10px; padding: 10px; font-size: 18px;">
+    <input type="email" class="form-control" id="inputEmail4" placeholder="example@domain.com" asp-for="Email" required>
   </div>
   <div class="col-md-6 offset-md-3">
     <label for="inputPassword4" class="form-label" style="font-weight: bold;">Пароль</label>
-    <input type="password" class="form-control" id="inputPassword4" asp-for="Password" style="border: 2px solid #007bff; border-radius: 10px; padding: 10px; font-size: 18px;">
+    <input type="password" class="form-control" id="inputPassword4" asp-for="Password" required>
   </div>
   <div class="col-12 text-center mt-3">
-    <a asp-controller="Home" asp-action="Signup" style="color: #007bff; font-family: 'Arial', sans-serif; font-size: 16px;">Не зареєстровані? Зробіть це зараз!</a>
+    <a asp-controller="Home" asp-action="Signup" required
+      style="color: #007bff; font-family: 'Arial', sans-serif; font-size: 16px;">Не зареєстровані? Зробіть це зараз!</a>
   </div>
   <div class="col-12 text-center mt-3">
-    <a asp-controller="Home" asp-action="Signup" style="color: #007bff; font-family: 'Arial', sans-serif; font-size: 16px;">Забули пароль?</a>
+    <a asp-controller="Home" asp-action="Signup" required
+      style="color: #007bff; font-family: 'Arial', sans-serif; font-size: 16px;">Забули пароль?</a>
   </div>
   <div class="col-12 text-center mt-4">
-    <button type="submit" class="btn btn-primary" style="background-color: #007bff; border-color: #007bff; font-family: 'Arial', sans-serif; font-weight: bold;">Увійти</button>
+    <button type="submit" class="btn btn-primary">Увійти</button>
+  </div>
+  <div class="col-md-6 offset-md-3">
+    <div asp-validation-summary="All" class="text-danger"></div>
   </div>
 </form>
+
+<script>
+  (function() {
+    'use strict'
+    var forms = document.querySelectorAll('.needs-validation')
+    Array.prototype.slice.call(forms)
+      .forEach(function(form) {
+        form.addEventListener('submit', function(event) {
+          if (!form.checkValidity()) {
+            event.preventDefault()
+            event.stopPropagation()
+          }
+          form.classList.add('was-validated')
+        }, false)
+      })
+  })()
+</script>
