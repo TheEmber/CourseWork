@@ -1,25 +1,37 @@
 @{
-    ViewData["Title"] = "Зареєструватися";
+    ViewData["Title"] = "Sign Up";
 }
 @model CourseWork.Models.RegisterModel
 
-<form class="row g-3" asp-action="Login" asp-controller="Account" method="post">
-    <div class="col-md-6 offset-md-3">
-        <label for="inputEmail4" class="form-label">Email</label>
-        <input type="email" class="form-control" id="inputEmail4" placeholder="example@domain.com" asp-for="Email">
+<body>
+    <div class="container">
+        <h2 class="text-center my-4">Реєстрація</h2>
+        <form class="row g-3" asp-action="Signup" asp-controller="Account" method="post">
+            <div class="col-md-6">
+                <label for="inputName" class="form-label">Ім'я</label>
+                <input type="text" class="form-control" id="inputName" asp-for="Name" required>
+            </div>
+            <div class="col-md-6">
+                <label for="inputSurname" class="form-label">Прізвище</label>
+                <input type="text" class="form-control" id="inputSurname" asp-for="Surname" required>
+            </div>
+            <div class="col-md-6">
+                <label for="inputEmail4" class="form-label">Email</label>
+                <input type="email" class="form-control" id="inputEmail4" placeholder="example@domain.com" asp-for="Email" required>
+            </div>
+            <div class="col-md-6">
+                <label for="inputPassword4" class="form-label">Пароль</label>
+                <input type="password" class="form-control" id="inputPassword4" asp-for="Password" required>
+            </div>
+            <div class="col-md-6">
+                <label for="inputPassword4Confirm" class="form-label">Підтвердіть пароль</label>
+                <input type="password" class="form-control" id="inputPassword4Confirm" asp-for="ConfirmPassword" required>
+            </div>
+            <div class="col-12 text-center">
+                <a asp-controller="Account" asp-action="Signup" class="my-2">Вже маєте обліковий запис? Увійти!</a>
+                <button type="submit" class="btn btn-primary">Зареєструватися</button>
+            </div>
+        </form>
     </div>
-    <div class="col-md-6 offset-md-3">
-        <label for="inputPassword4" class="form-label">Пароль</label>
-        <input type="password" class="form-control" id="inputPassword4" asp-for="Password">
-    </div>
-        <div class="col-12 text-center mt-3">
-        <a asp-controller="Home" asp-action="Signup">Не зареєстровані? Зробіть це зараз!</a>
-    </div>
-    <div class="col-12 text-center mt-3">
-        <a asp-controller="Home" asp-action="Signup">Забули пароль?</a>
-    </div>
-    <div class="col-12 text-center mt-4">
-        <button type="submit" class="btn btn-primary">Увійти</button>
-    </div>
-</form>
-
+</body>
+</html>
