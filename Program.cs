@@ -17,7 +17,9 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
 
 // Configure database services
-builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlite(builder.Configuration.GetConnectionString("LocalDb")));
+string currentDirectory = Environment.CurrentDirectory;
+string databasePath = Path.Combine(currentDirectory, builder.Configuration.GetConnectionString("LocalDb"));
+builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlite($"Data Source={databasePath}"));
     using (var serviceProvider = builder.Services.BuildServiceProvider())
     {
         serviceProvider.GetRequiredService<ApplicationDbContext>().Database.Migrate();

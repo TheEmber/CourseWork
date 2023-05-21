@@ -10,8 +10,7 @@ public class BasicTests
     private readonly WebApplicationFactory<Program> _factory;
     public BasicTests(WebApplicationFactory<Program> factory)
     {
-        string baseDirectory = AppContext.BaseDirectory;
-        string contentRootPath = Path.Combine(baseDirectory, "../../..");
+        string contentRootPath = Environment.CurrentDirectory;
         factory = factory.WithWebHostBuilder(builder => builder.UseContentRoot(contentRootPath));
         _factory = factory;
     }
