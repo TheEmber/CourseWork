@@ -4,7 +4,6 @@ using System.ComponentModel.DataAnnotations;
 
 namespace CourseWork.Models;
 public class Flight {
-    [Key]
     public Guid ID { get; set; }
     public string Source { get; set; }
     public string Destination { get; set; }

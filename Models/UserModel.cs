@@ -42,7 +42,7 @@ public class User
     }
     public static User RegisterUser(string email, string password, string name, string surname, Role role)
     {
-        return new User(Guid.NewGuid(), email, HashPassword(password), name, surname, 1, role);
+        return new User(Guid.NewGuid(), email, HashPassword(password), name, surname, role.ID, role);
     }
     private static string HashPassword(string password)
     {
@@ -72,7 +72,7 @@ public class User
         }
         if (password == null)
         {
-            throw new ArgumentNullException("password");
+            throw new ArgumentNullException(nameof(password));
         }
         byte[] src = Convert.FromBase64String(this.Password);
         if ((src.Length != 0x31) || (src[0] != 0))
@@ -98,7 +98,7 @@ public class User
             return false;
         if (array1.Length != array2.Length)
             return false;
-        
+
         foreach (byte b in array1)
         {
             bool found = false;
