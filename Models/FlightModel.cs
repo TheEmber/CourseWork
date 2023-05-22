@@ -20,8 +20,13 @@ public class Flight {
             Destination = this.Destination,
             DepartureDate = this.DepartureDate,
             ArrivalDate = this.ArrivalDate,
-            Price = this.Price
+            Price = this.Price,
+            TicketCount = count
         };
+    }
+    public ICollection<Ticket> GetSelectedTickets(List<int> selectedSeats)
+    {
+        return Tickets.Where(t => selectedSeats.Contains(t.Seat)).ToList();
     }
 }
 

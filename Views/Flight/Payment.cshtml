@@ -1,0 +1,60 @@
+@model CourseWork.ViewModels.FlightViewModel
+
+<body>
+    <div class="container">
+        <h2>Payment Details</h2>
+
+        <form>
+            <div class="form-group">
+                <label for="source">Вирушає з:</label>
+                <input type="text" class="form-control" id="source" value="@Model.Source" readonly>
+            </div>
+
+            <div class="form-group">
+                <label for="destination">Прямує до:</label>
+                <input type="text" class="form-control" id="destination" value="@Model.Destination" readonly>
+            </div>
+
+            <div class="form-group">
+                <label for="departureDate">Дата вильоту:</label>
+                <input type="text" class="form-control" id="departureDate" value="@Model.DepartureDate.ToString("dd/MM/yyyy HH:mm")" readonly>
+            </div>
+
+            <div class="form-group">
+                <label for="arrivalDate">Дата прибуття:</label>
+                <input type="text" class="form-control" id="arrivalDate" value="@Model.ArrivalDate.ToString("dd/MM/yyyy HH:mm")" readonly>
+            </div>
+
+            <div class="form-group">
+                <label for="price">Ціна за квиток:</label>
+                <input type="text" class="form-control" id="price" value="@Model.Price" readonly>
+            </div>
+
+            <div class="form-group">
+                <label for="seats">Обрані місця:</label>
+                <ul id="seats" class="list-group">
+                    @foreach (var seat in Model.Seats)
+                    {
+                        <li class="list-group-item">@seat</li>
+                    }
+                </ul>
+            </div>
+
+            <div class="form-group">
+                <label for="totalPrice">Повна ціна:</label>
+                <input type="text" class="form-control" id="totalPrice" value="@Model.TotalPrice" readonly>
+            </div>
+        </form>
+        <form method="post" action="/Flight/BookTickets">
+            <input type="hidden" name="id" value="@Model.ID" />
+           @*  <input type="hidden" name="selectedSeats" value="@Model.Seats" /> *@
+            @foreach (int seat in Model.Seats)
+                {
+                    <input type="hidden" name="selectedSeats[]" value="@seat" />
+                }
+                <div>
+                    <button type="submit" class="btn btn-primary" style="background-color: #007bff; border-color: #007bff; font-family: 'Arial', sans-serif; font-weight: bold;">Забронювати</button>
+                </div>
+        </form>
+    </div>
+</body>

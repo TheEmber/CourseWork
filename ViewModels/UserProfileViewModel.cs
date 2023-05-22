@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using CourseWork.Models;
 
-namespace CourseWork;
+namespace CourseWork.ViewModels;
 
 public class UserProfileViewModel
 {

@@ -1,10 +1,11 @@
 @{
-    ViewData["Title"] = "Деталі рейсу";
+ViewData["Title"] = "Деталі рейсу";
 }
 @model Flight
 
 <div class="container">
-    <h1 class="text-center my-4" style="color: #007bff; font-family: 'Arial', sans-serif; font-weight: bold;">Інформація про рейс</h1>
+    <h1 class="text-center my-4" style="color: #007bff; font-family: 'Arial', sans-serif; font-weight: bold;">Інформація
+        про рейс</h1>
     <div>
         <h3>Місто відправлення:</h3>
         <p>@Model.Source</p>
@@ -28,15 +29,31 @@
     <div>
         <h3>Виберіть місця:</h3>
         <div>
+
             @foreach (var ticket in Model.Tickets)
             {
-                <button class="btn btn-outline-primary m-2 seat-button" data-seat="@ticket.Seat" onclick="selectSeat(this)" style="border-color: #007bff; color: #007bff; font-family: 'Arial', sans-serif; font-weight: bold;">@ticket.Seat</button>
+            <button class="btn btn-outline-primary m-2 seat-button" data-seat="@ticket.Seat" onclick="selectSeat(this)"
+                style="border-color: #007bff; color: #007bff; font-family: 'Arial', sans-serif; font-weight: bold;">@ticket.Seat</button>
             }
         </div>
+        <div>
+            <form method="post" action="/Flight/Payment">
+                <input type="hidden" name="ID" value="@Model.ID.ToString()" />
+                <input type="hidden" name="Source" value="@Model.Source" />
+                <input type="hidden" name="Destination" value="@Model.Destination" />
+                <input type="hidden" name="DepartureDate" value="@Model.DepartureDate.ToString("MM/dd/yyyy HH:mm:ss")" />
+                <input type="hidden" name="ArrivalDate" value="@Model.ArrivalDate.ToString("MM/dd/yyyy HH:mm:ss")" />
+                <input type="hidden" name="Price" value="@Model.Price" />
+                <input type="hidden" name="SelectedSeats" id="selectedSeatsInput" value="" />
+                <div>
+                    <div asp-validation-summary="All" class="text-danger"></div>
+                    <button type="submit" class="btn btn-primary"
+                        style="background-color: #007bff; border-color: #007bff; font-family: 'Arial', sans-serif; font-weight: bold;">Забронювати</button>
+                </div>
+            </form>
+        </div>
     </div>
-    <div>
-        <button class="btn btn-primary" onclick="bookSeats()" style="background-color: #007bff; border-color: #007bff; font-family: 'Arial', sans-serif; font-weight: bold;">Забронювати</button>
-    </div>
+</div>
 </div>
 
 <script>
@@ -54,6 +71,7 @@
             selectedSeats.splice(index, 1);
             button.classList.remove("selected");
         }
+        document.getElementById("selectedSeatsInput").value = selectedSeats.join(",");
         console.log(selectedSeats);
     }
 </script>

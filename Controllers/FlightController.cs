@@ -2,6 +2,12 @@ using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using CourseWork.Models;
 using CourseWork.Data;
+using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
+using CourseWork.ViewModels;
+using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+
 namespace CourseWork.Controllers;
 
 public class FlightController : Controller
@@ -12,7 +18,7 @@ public class FlightController : Controller
         _context = context;
     }
 
-    public ActionResult List()
+    public IActionResult List()
     {
         var flights = _context.Flights.ToList();
         var flightsWithCount = new List<FlightWithCount>();
@@ -29,9 +35,63 @@ public class FlightController : Controller
     public IActionResult Details(Guid FlightId)
     {
         Flight flight = _context.Flights.FirstOrDefault(f => f.ID == FlightId);
-        var tickets = _context.Tickets.Where(t => t.FlightID == FlightId).ToList();
+        flight.Tickets = _context.Tickets.Where(t => t.FlightID == FlightId && t.BookedBy == null).ToList();
 
+        string errorMessage = TempData["ErrorMessage"] as string;
+        if (!string.IsNullOrEmpty(errorMessage))
+        {
+            ModelState.AddModelError(string.Empty, errorMessage);
+        }
         return View(flight);
+    }
+    [HttpPost]
+    [Authorize]
+    public async Task<IActionResult> Payment(string id, List<int> selectedSeats)
+    {
+        if(selectedSeats.Count != 0 && selectedSeats != null)
+        {
+            Flight flight = await _context.Flights
+            .Include(f => f.Tickets)
+            .SingleOrDefaultAsync(f => f.ID == Guid.Parse(id));
+            FlightViewModel model = new(flight, selectedSeats);
+            if (flight.DepartureDate < DateTime.Now)
+            {
+                TempData["ErrorMessage"] = "Бронювання квитків на вже початий рейс недоступне";
+                return RedirectToAction("Details", new { FlightId = Guid.Parse(id) });
+            }
+            foreach (Ticket ticket in flight.GetSelectedTickets(selectedSeats))
+            {
+            if(ticket.BookedBy != null)
+                {
+                    TempData["ErrorMessage"] = "Деякі з обраних квитків вже були заброньовані";
+                    return RedirectToAction("Details", new { FlightId = Guid.Parse(id) });
+                }
+            }
+            return View(model);
+        }
+        TempData["ErrorMessage"] = "Оберіть хоча-б одне місце";
+        return RedirectToAction("Details", new { FlightId = Guid.Parse(id) });
+    }
+
+    [HttpPost]
+    [Authorize]
+    public async Task<IActionResult> BookTickets(string id, List<int> selectedSeats)
+    {
+        if(User.Identity.IsAuthenticated)
+        {
+            Guid userId = Guid.Parse(HttpContext.User.FindFirst(ClaimsIdentity.DefaultNameClaimType)?.Value);
+            Flight flight = await _context.Flights
+            .Include(f => f.Tickets)
+            .SingleOrDefaultAsync(f => f.ID == Guid.Parse(id));
+
+            foreach (Ticket ticket in flight.GetSelectedTickets(selectedSeats))
+            {
+                ticket.BookedBy = userId;
+            }
+            await _context.SaveChangesAsync();
+            return RedirectToAction("Tickets", "Account");
+        }
+        return View(Details(Guid.Parse(id)));
     }
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
