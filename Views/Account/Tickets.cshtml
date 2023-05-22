@@ -17,47 +17,53 @@
         </select>
     </div>
 
-    <table class="table table-bordered table-striped">
-        <thead>
-            <tr>
-                <th>Відправляється з</th>
-                <th>Прямує до</th>
-                <th>Ціна</th>
-                <th>Відправляється</th>
-                <th>Прибуває</th>
-                <th>Місця</th>
-                <th>Дії</th>
-            </tr>
-        </thead>
-        <tbody id="flightTable">
-            @foreach (var flight in Model)
-            {
+    <form action="@Url.Action("ReturnTickets", "Flight")" method="post">
+        <table class="table table-bordered table-striped">
+            <thead>
                 <tr>
-                    <td>@flight.Source</td>
-                    <td>@flight.Destination</td>
-                    <td>@flight.Price ₴</td>
-                    <td>@flight.DepartureDate.ToString("dd/MM/yyyy HH:mm")</td>
-                    <td>@flight.ArrivalDate.ToString("dd/MM/yyyy HH:mm")</td>
-                    <td>
-                        @foreach (var seat in flight.Seats)
-                        {
-                            <span>@seat</span>
-                            if (seat != flight.Seats.Last())
-                            {
-                                <span>, </span>
-                            }
-                        }
-                    </td>
-                    <form action="@Url.Action("Details", "Flight")" method="get">
-                        <input type="hidden" name="FlightId" value="@flight.ID" />
-                        <td>
-                            <button type="submit" class="btn btn-primary">Повернути</button>
-                        </td>
-                    </form>
+                    <th>Відправляється з</th>
+                    <th>Прямує до</th>
+                    <th>Ціна</th>
+                    <th>Відправляється</th>
+                    <th>Прибуває</th>
+                    <th>Місця</th>
+                    <th>Дії</th>
                 </tr>
-            }
-        </tbody>
-    </table>
+            </thead>
+            <tbody id="flightTable">
+                @foreach (var flight in Model)
+                {
+                    @foreach (var seat in flight.Seats)
+                    {
+                        <tr>
+                            <td>@flight.Source</td>
+                            <td>@flight.Destination</td>
+                            <td>@flight.Price ₴</td>
+                            <td>@flight.DepartureDate.ToString("dd/MM/yyyy HH:mm")</td>
+                            <td>@flight.ArrivalDate.ToString("dd/MM/yyyy HH:mm")</td>
+                            <td>@seat</td>
+                            <td>
+                                @if(flight.DepartureDate.AddDays(-1) > DateTime.Now)
+                                {
+                                    <input type="checkbox" name="selectedTickets" value="@seat" />
+                                } else if (flight.DepartureDate < DateTime.Now)
+                                {
+                                    <form action="@Url.Action("UnbookTicket", "Flight")" method="post">
+                                        <input type="hidden" name="FlightId" value="@flight.ID" />
+                                        <button type="submit" class="btn btn-danger">Видалити</button>
+                                    </form>
+                                }
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+
+        <div class="text-center">
+            <button type="submit" class="btn btn-primary">Повернути вибрані</button>
+        </div>
+    </form>
 </div>
 
 @section Scripts {
@@ -65,7 +71,7 @@
         function filterFlights() {
             let input = document.getElementById("searchInput");
             let filter = input.value.toUpperCase();
-            let table = document.getElementById("ticketTable");
+            let table = document.getElementById("flightTable");
             let tr = table.getElementsByTagName("tr");
 
             for (let i = 0; i < tr.length; i++) {
@@ -87,7 +93,7 @@
 
         function sortFlights() {
             let sortBy = document.getElementById("sortSelect").value;
-            let table = document.getElementById("ticketTable");
+            let table = document.getElementById("flightTable");
             let rows = Array.from(table.rows);
 
             let comparator;
@@ -103,4 +109,3 @@
         }
     </script>
 }
-
