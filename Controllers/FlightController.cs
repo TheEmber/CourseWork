@@ -93,6 +93,21 @@ public class FlightController : Controller
         }
         return View(Details(Guid.Parse(id)));
     }
+    [Authorize]
+    public async Task SetTicketOwnerNull(int seat, Guid flightId)
+    {
+        Guid userId = Guid.Parse(HttpContext.User.FindFirst(ClaimsIdentity.DefaultNameClaimType)?.Value);
+        Ticket ticket = await _context.Tickets
+        .SingleOrDefaultAsync(t => t.Seat == seat && t.FlightID == flightId && t.BookedBy == userId);
+        ticket.BookedBy = null;
+        _context.SaveChanges();
+    }
+    [Authorize]
+    public async Task<IActionResult> UnbookTicket(int seat, Guid flightId)
+    {
+        await SetTicketOwnerNull(seat, flightId);
+        return RedirectToAction("Tickets", "Account");
+    }
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
     public IActionResult Error()

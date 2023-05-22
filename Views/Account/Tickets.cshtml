@@ -16,8 +16,6 @@
             <option value="price">Ціна</option>
         </select>
     </div>
-
-    <form action="@Url.Action("ReturnTickets", "Flight")" method="post">
         <table class="table table-bordered table-striped">
             <thead>
                 <tr>
@@ -45,10 +43,15 @@
                             <td>
                                 @if(flight.DepartureDate.AddDays(-1) > DateTime.Now)
                                 {
-                                    <input type="checkbox" name="selectedTickets" value="@seat" />
+                                    <form action="@Url.Action("UnbookTicket", "Flight")" method="post">
+                                        <input type="hidden" name="Seat" value="@seat" />
+                                        <input type="hidden" name="FlightId" value="@flight.ID" />
+                                        <button type="submit" class="btn btn-danger">Повернути</button>
+                                    </form>
                                 } else if (flight.DepartureDate < DateTime.Now)
                                 {
                                     <form action="@Url.Action("UnbookTicket", "Flight")" method="post">
+                                        <input type="hidden" name="Seat" value="@seat" />
                                         <input type="hidden" name="FlightId" value="@flight.ID" />
                                         <button type="submit" class="btn btn-danger">Видалити</button>
                                     </form>
@@ -59,11 +62,6 @@
                 }
             </tbody>
         </table>
-
-        <div class="text-center">
-            <button type="submit" class="btn btn-primary">Повернути вибрані</button>
-        </div>
-    </form>
 </div>
 
 @section Scripts {
