@@ -117,10 +117,28 @@ public class AccountController : Controller
         }
         return View();
     }
-
     public async Task<IActionResult> Logout()
     {
         await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
         return RedirectToAction("Login", "Account");
+    }
+    [Authorize]
+    public IActionResult Tickets()
+    {
+        Guid userId = Guid.Parse(HttpContext!.User.FindFirst(ClaimsIdentity.DefaultNameClaimType)?.Value);
+        var flights = _context.Flights
+        .Where(f => f.Tickets.Any(t => t.BookedBy == userId))
+        .ToList();
+        List<FlightViewModel> model = new();
+        foreach (var flight in flights)
+        {
+            var tickets = _context.Tickets
+            .Where(t => t.BookedBy == userId && t.FlightID == flight.ID)
+            .Select(t => t.Seat)
+            .ToList();
+            FlightViewModel mod = new(flight, tickets);
+            model.Add(mod);
+        }
+        return View(model);
     }
 }
