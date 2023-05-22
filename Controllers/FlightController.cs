@@ -20,7 +20,7 @@ public class FlightController : Controller
 
     public IActionResult List()
     {
-        var flights = _context.Flights.ToList();
+        var flights = _context.Flights.Where(f => f.DepartureDate > DateTime.Now).ToList();
         var flightsWithCount = new List<FlightWithCount>();
         foreach (var flight in flights)
         {
