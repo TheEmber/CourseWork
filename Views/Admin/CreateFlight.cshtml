@@ -1,0 +1,38 @@
+@{
+    ViewData["Title"] = "Додати рейс";
+}
+
+@model CreateFlight
+
+<div class="container">
+    <h1 class="text-center my-4" style="color: #007bff; font-family: 'Arial', sans-serif; font-weight: bold;">Додавання
+        рейсу</h1>
+    <form method="post" action="/Admin/CreateFlight">
+        <div>
+            <h3>Місто відправлення:</h3>
+            <input name="Source" value="@Model.Source" />
+        </div>
+        <div>
+            <h3>Місто прибуття:</h3>
+            <input name="Destination" value="@Model.Destination" />
+        </div>
+        <div>
+            <h3>Час відправлення:</h3>
+            <input type="datetime-local" name="DepartureDate" value="@Model.DepartureDate.ToString("yyyy-MM-ddTHH:mm")" />
+        </div>
+        <div>
+            <h3>Час прибуття:</h3>
+            <input type="datetime-local" name="ArrivalDate" value="@Model.ArrivalDate.ToString("yyyy-MM-ddTHH:mm")" />
+        </div>
+        <div>
+            <h3>Ціна:</h3>
+            <input type="number" name="Price" value="@Model.Price" />
+        </div>
+        <div>
+            <h3>Місця:</h3>
+            <input type="text" name="Seats" placeholder="Наприклад, 5-7" />
+        </div>
+        <button type="submit" class="btn btn-primary"
+            style="background-color: #007bff; border-color: #007bff; font-family: 'Arial', sans-serif; font-weight: bold;">Зберегти зміни</button>
+    </form>
+</div>

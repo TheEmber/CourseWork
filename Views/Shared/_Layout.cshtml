@@ -33,6 +33,18 @@
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Умови
                                 використання</a>
                         </li>
+                        @if(User.IsInRole("Manager") || User.IsInRole("Admin"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Admin" asp-action="FlightManagement">Керування рейсами</a>
+                            </li>
+                            if(User.IsInRole("Admin"))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Admin" asp-action="Privacy">Керування користувачами</a>
+                                </li>
+                            }
+                        }
                     </ul>
                     <ul class="navbar-nav ml-auto">
                         @if (!User.Identity.IsAuthenticated)

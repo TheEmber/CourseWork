@@ -4,13 +4,20 @@ using System.ComponentModel.DataAnnotations;
 
 namespace CourseWork.Models;
 public class Flight {
+    [Required]
     public Guid ID { get; set; }
+    [Required]
     public string Source { get; set; }
+    [Required]
     public string Destination { get; set; }
+    [Required]
     public DateTime DepartureDate { get; set; }
+    [Required]
     public DateTime ArrivalDate { get; set; }
+    [Required]
     public double Price { get; set; }
-    public ICollection<Ticket> Tickets { get; set; }
+    [Required]
+    public ICollection<Ticket>? Tickets { get; set; }
     public FlightWithCount ToFlightWithCount(int count)
     {
         return new FlightWithCount
