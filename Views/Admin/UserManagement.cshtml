@@ -1,3 +1,75 @@
 @{
     ViewData["Title"] = "Керування користувачами";
 }
+@model Tuple<List<User>, List<Role>>
+
+<div class="container">
+    <h1 class="text-center my-4">Користувачі</h1>
+    <input class="form-control mb-3" id="searchInput" type="text" placeholder="Шукати користувачів..." oninput="filterUsers()">
+
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>Email</th>
+                <th>Ім'я</th>
+                <th>Роль</th>
+                <th>Дії</th>
+            </tr>
+        </thead>
+        <tbody id="userTable">
+            @foreach (var user in Model.Item1)
+            {
+                <tr>
+                    <td>@user.Email</td>
+                    <td>@user.Name</td>
+                    <td>@user.Role.Name</td>
+                    <form action="@Url.Action("UpdateUserRole", "Admin")" method="post">
+                        <input type="hidden" name="UserId" value="@user.ID" />
+                        <td>
+                            <select name="RoleId">
+                                @foreach (var role in Model.Item2)
+                                {
+                                    <option value="@role.ID")>@role.Name</option>
+                                }
+                            </select>
+                            <button type="submit" class="btn btn-primary">Змінити роль</button>
+                        </td>
+                    </form>
+                    <form action="@Url.Action("DeleteUser", "Admin")" method="get">
+                        <input type="hidden" name="UserId" value="@user.ID" />
+                        <td>
+                            <button type="submit" class="btn btn-primary">Видалити</button>
+                        </td>
+                    </form>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@section Scripts {
+    <script>
+        function filterUsers() {
+            let input = document.getElementById("searchInput");
+            let filter = input.value.toUpperCase();
+            let table = document.getElementById("userTable");
+            let tr = table.getElementsByTagName("tr");
+
+            for (let i = 0; i < tr.length; i++) {
+                let userName = tr[i].getElementsByTagName("td")[1];
+                let userEmail = tr[i].getElementsByTagName("td")[0];
+
+                if (userName || userEmail) {
+                    let userNameText = userName.textContent || userName.innerText;
+                    let userEmailText = userEmail.textContent || userEmail.innerText;
+
+                    if (userNameText.toUpperCase().indexOf(filter) > -1 || userEmailText.toUpperCase().indexOf(filter) > -1) {
+                        tr[i].style.display = "";
+                    } else {
+                        tr[i].style.display = "none";
+                    }
+                }
+            }
+        }
+    </script>
+}

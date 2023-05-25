@@ -96,7 +96,7 @@ public class AdminController : Controller
         for(int i = seats[0]; i<= seats[1]; i++)
         {
             // Check if a ticket with the same FlightID and Seat already exists
-            bool ticketExists = _context.Tickets.Any(t => t.FlightID == flightId && t.Seat == i);
+            bool ticketExists = await _context.Tickets.AnyAsync(t => t.FlightID == flightId && t.Seat == i);
 
             if (!ticketExists)
             {
@@ -105,26 +105,69 @@ public class AdminController : Controller
                     FlightID = flightId,
                     Seat = i
                 };
-                _context.Tickets.Add(ticket);
+                await _context.Tickets.AddAsync(ticket);
             }
         }
         await _context.SaveChangesAsync();
     }
     [Authorize(Roles = "Manager, Admin")]
     [HttpPost]
-    public IActionResult CreateFlight(CreateFlight inputFlight, string? seats)
+    public async Task<IActionResult> CreateFlight(CreateFlight inputFlight, string? seats)
     {
         if(ModelState.IsValid)
         {
             Flight flight = inputFlight.ToFlight();
-            _context.Flights.Add(flight);
-            _context.SaveChanges();
+            await _context.Flights.AddAsync(flight);
+            await _context.SaveChangesAsync();
             if (!string.IsNullOrEmpty(seats))
             {
-                AddSeats(seats, flight.ID);
+                await AddSeats(seats, flight.ID);
             }
         }
 
         return View(inputFlight);
+    }
+    public IActionResult UserManagement()
+    {
+        var users = _context.Users.Include(u => u.Role).ToList();
+        var roles = _context.Roles.ToList();
+
+        var model = new Tuple<List<User>, List<Role>>(users, roles);
+        return View(model);
+    }
+    [HttpPost]
+    public async Task<IActionResult> DeleteUser(Guid id)
+    {
+        var user = await _context.Users.FindAsync(id);
+        if (user == null)
+        {
+            return NotFound();
+        }
+
+        _context.Users.Remove(user);
+        await _context.SaveChangesAsync();
+
+        return RedirectToAction(nameof(UserManagement));
+    }
+    [HttpPost]
+    public async Task<IActionResult> ChangeUserRole(Guid userId, int roleId)
+    {
+        var user = await _context.Users.FindAsync(userId);
+        if (user == null)
+        {
+            return NotFound();
+        }
+
+        var role = await _context.Roles.FindAsync(roleId);
+        if (role == null)
+        {
+            return NotFound();
+        }
+
+        user.RoleID = roleId;
+        _context.Update(user);
+        await _context.SaveChangesAsync();
+
+        return RedirectToAction(nameof(UserManagement));
     }
 }
