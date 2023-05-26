@@ -1,6 +1,6 @@
 using CourseWork.Models;
 
-namespace CourseWork.Users;
+namespace CourseWork.Interfaces;
 
 public interface IHashable
 {

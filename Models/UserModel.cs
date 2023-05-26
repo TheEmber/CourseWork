@@ -1,7 +1,4 @@
-using CourseWork.Users;
-using Microsoft.AspNetCore.Identity;
-using System.ComponentModel.DataAnnotations;
-using System.Security.Claims;
+using CourseWork.Interfaces;
 using System.Security.Cryptography;
 
 namespace CourseWork.Models;
