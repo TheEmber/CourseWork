@@ -1,3 +1,4 @@
+using CourseWork.Users;
 using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations;
 using System.Security.Claims;
@@ -5,7 +6,7 @@ using System.Security.Cryptography;
 
 namespace CourseWork.Models;
 
-public class User
+public class User : IHashable
 {
     public Guid ID { get; set; }
     public String Email { get; set; }
@@ -63,7 +64,7 @@ public class User
         return Convert.ToBase64String(dst);
     }
 
-    public bool VerifyHashedPassword(String password)
+    public bool VerifyHashedPassword(string password)
     {
         byte[] buffer4;
         if (this.Password == null)
