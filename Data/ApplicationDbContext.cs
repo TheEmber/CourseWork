@@ -113,7 +113,7 @@ public class ApplicationDbContext : DbContext
         var adminRole = context.Roles.Single(r => r.Name == "Admin");
         var users = new[]
         {
-                    User.RegisterUser("admin", "admin", "admin", "admin", adminRole),
+                    User.RegisterUser("admin@admin.admin", "admin", "admin", "admin", adminRole),
                     User.RegisterUser("user2@example.com", "password2", "name2", "surname2", userRole)
                 };
 
