@@ -20,7 +20,7 @@ public class BasicTests
     [InlineData("/Flight/List")]
     [InlineData("/Account/Login")]
     [InlineData("/Account/Signup")]
-    public async Task Get_EndpointsReturnSuccessAndCorrectContentType(string url)
+    public async Task EndpointsCorrect(string url)
     {
         var client = _factory.CreateClient();
 
