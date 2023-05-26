@@ -123,6 +123,7 @@ public class AdminController : Controller
             {
                 await AddSeats(seats, flight.ID);
             }
+            return RedirectToAction("FlightManagement", "Admin");
         }
 
         return View(inputFlight);
