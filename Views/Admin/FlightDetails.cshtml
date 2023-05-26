@@ -31,9 +31,12 @@
         </div>
         <div>
             <h3>Місця:</h3>
-            <input type="text" name="Seats" placeholder="Наприклад, 5-7" />
+            <input type="text" name="seatsRange" placeholder="Наприклад, 5-7" />
         </div>
         <button type="submit" class="btn btn-primary"
             style="background-color: #007bff; border-color: #007bff; font-family: 'Arial', sans-serif; font-weight: bold;">Зберегти зміни</button>
     </form>
+    <div class="col-md-6 offset-md-3">
+        <div asp-validation-summary="All" class="text-danger"></div>
+    </div>
 </div>

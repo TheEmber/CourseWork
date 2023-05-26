@@ -64,7 +64,7 @@ public class AdminController : Controller
     }
     [HttpPost]
     [Authorize(Roles = "Manager, Admin")]
-    public IActionResult UpdateFlight(EditFlight model, string? seats)
+    public IActionResult UpdateFlight(EditFlight model, string? seatsRange)
     {
         if (ModelState.IsValid)
         {
@@ -72,6 +72,31 @@ public class AdminController : Controller
 
             if (flight != null)
             {
+                var seats = new List<int>();
+                if(seatsRange != null)
+                {
+                    foreach (var seat in seatsRange.Split('-'))
+                    {
+                        if(int.TryParse(seat, out var seatNumber))
+                        {
+                            seats.Add(seatNumber);
+                        }
+                        else
+                        {
+                            ModelState.AddModelError("", "Введіть коректно діапазон квиктів");
+                            return View("FlightDetails", model);
+                        }
+                    }
+                    if(seats.Count != 2)
+                    {
+                        ModelState.AddModelError("", "Введіть коректно діапазон квиктів");
+                        return View("FlightDetails", model);
+                    }
+                    else
+                    {
+                        AddSeats(seats, flight.ID);
+                    }
+                }
                 flight.Source = model.Source;
                 flight.Destination = model.Destination;
                 flight.DepartureDate = model.DepartureDate;
@@ -79,10 +104,6 @@ public class AdminController : Controller
                 flight.Price = model.Price;
 
                 _context.SaveChanges();
-                if (!string.IsNullOrEmpty(seats))
-                {
-                    AddSeats(seats, flight.ID);
-                }
 
                 return RedirectToAction("FlightManagement", "Admin");
             }
@@ -90,12 +111,10 @@ public class AdminController : Controller
         return View("FlightDetails", model);
     }
     [Authorize(Roles = "Manager, Admin")]
-    public async Task AddSeats(string seatsRange, Guid flightId)
+    public async Task AddSeats(List<int> seats, Guid flightId)
     {
-        var seats = seatsRange.Split('-').Select(int.Parse).ToList();
         for(int i = seats[0]; i<= seats[1]; i++)
         {
-            // Check if a ticket with the same FlightID and Seat already exists
             bool ticketExists = await _context.Tickets.AnyAsync(t => t.FlightID == flightId && t.Seat == i);
 
             if (!ticketExists)
@@ -112,18 +131,40 @@ public class AdminController : Controller
     }
     [Authorize(Roles = "Manager, Admin")]
     [HttpPost]
-    public async Task<IActionResult> CreateFlight(CreateFlight inputFlight, string? seats)
+    public async Task<IActionResult> CreateFlight(CreateFlight inputFlight, string? seatsRange)
     {
         if(ModelState.IsValid)
         {
             Flight flight = inputFlight.ToFlight();
+            var seats = new List<int>();
+            if(seatsRange != null)
+            {
+                foreach (var seat in seatsRange.Split('-'))
+                {
+                    if(int.TryParse(seat, out var seatNumber))
+                    {
+                        seats.Add(seatNumber);
+                    }
+                    else
+                    {
+                        ModelState.AddModelError("", "Введіть коректно діапазон квиктів");
+                        return View(inputFlight);
+                    }
+                }
+                if(seats.Count != 2)
+                {
+                    ModelState.AddModelError("", "Введіть коректно діапазон квиктів");
+                    return View(inputFlight);
+                }
+                else
+                {
+                    AddSeats(seats, flight.ID);
+                }
+            }
             await _context.Flights.AddAsync(flight);
             await _context.SaveChangesAsync();
-            if (!string.IsNullOrEmpty(seats))
-            {
-                await AddSeats(seats, flight.ID);
-            }
-            return RedirectToAction("FlightManagement", "Admin");
+
+            return RedirectToAction("FlightManagement");
         }
 
         return View(inputFlight);
