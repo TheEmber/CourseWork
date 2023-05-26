@@ -69,6 +69,14 @@ public class AdminController : Controller
 
             if (flight != null)
             {
+                flight.Source = model.Source;
+                flight.Destination = model.Destination;
+                flight.DepartureDate = model.DepartureDate;
+                flight.ArrivalDate = model.ArrivalDate;
+                flight.Price = model.Price;
+
+                _context.SaveChanges();
+
                 var seats = new List<int>();
                 if(seatsRange != null)
                 {
@@ -94,13 +102,6 @@ public class AdminController : Controller
                         AddSeats(seats, flight.ID);
                     }
                 }
-                flight.Source = model.Source;
-                flight.Destination = model.Destination;
-                flight.DepartureDate = model.DepartureDate;
-                flight.ArrivalDate = model.ArrivalDate;
-                flight.Price = model.Price;
-
-                _context.SaveChanges();
 
                 return RedirectToAction("FlightManagement", "Admin");
             }
@@ -133,33 +134,37 @@ public class AdminController : Controller
         if(ModelState.IsValid)
         {
             Flight flight = inputFlight.ToFlight();
-            var seats = new List<int>();
             if(seatsRange != null)
             {
-                foreach (var seat in seatsRange.Split('-'))
+                await _context.Flights.AddAsync(flight);
+                await _context.SaveChangesAsync();
+
+                var seats = new List<int>();
+                if(seatsRange != null)
                 {
-                    if(int.TryParse(seat, out var seatNumber))
+                    foreach (var seat in seatsRange.Split('-'))
                     {
-                        seats.Add(seatNumber);
+                        if(int.TryParse(seat, out var seatNumber))
+                        {
+                            seats.Add(seatNumber);
+                        }
+                        else
+                        {
+                            ModelState.AddModelError("", "Введіть коректно діапазон квиктів");
+                            return View("FlightDetails", flight);
+                        }
+                    }
+                    if(seats.Count != 2)
+                    {
+                        ModelState.AddModelError("", "Введіть коректно діапазон квиктів");
+                        return View("FlightDetails", flight);
                     }
                     else
                     {
-                        ModelState.AddModelError("", "Введіть коректно діапазон квиктів");
-                        return View(inputFlight);
+                        AddSeats(seats, flight.ID);
                     }
                 }
-                if(seats.Count != 2)
-                {
-                    ModelState.AddModelError("", "Введіть коректно діапазон квиктів");
-                    return View(inputFlight);
-                }
-                else
-                {
-                    AddSeats(seats, flight.ID);
-                }
             }
-            await _context.Flights.AddAsync(flight);
-            await _context.SaveChangesAsync();
 
             return RedirectToAction("FlightManagement");
         }

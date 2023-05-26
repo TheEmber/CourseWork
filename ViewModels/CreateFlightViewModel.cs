@@ -17,7 +17,7 @@ public class CreateFlight
     {
         return new Flight()
         {
-            ID = new Guid(),
+            ID = Guid.NewGuid(),
             Source = this.Source,
             Destination = this.Destination,
             DepartureDate = this.DepartureDate,
