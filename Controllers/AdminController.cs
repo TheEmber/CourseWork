@@ -60,7 +60,7 @@ public class AdminController : Controller
         {
             ModelState.AddModelError(string.Empty, errorMessage);
         }
-        return View(flight);
+        return View(EditFlight.ToEditFlight(flight));
     }
     [HttpPost]
     [Authorize(Roles = "Manager, Admin")]

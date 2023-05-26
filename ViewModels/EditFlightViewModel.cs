@@ -17,4 +17,16 @@ public class EditFlight : CreateFlight
             Price = this.Price
         };
     }
+    public static EditFlight ToEditFlight(Flight flight)
+    {
+        return new EditFlight()
+        {
+            ID = flight.ID,
+            Source = flight.Source,
+            Destination = flight.Destination,
+            DepartureDate = flight.DepartureDate,
+            ArrivalDate = flight.ArrivalDate,
+            Price = flight.Price
+        };
+    }
 }
