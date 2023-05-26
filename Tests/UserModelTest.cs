@@ -16,17 +16,34 @@ public class UserModelTest
         Assert.True(user.Password != rightPassword);
     }
     [Fact]
-    public void HashVerificationTest()
+    public void HashRandomTest()
+    {
+        const string password = "fmodsuyguhfds";
+
+        User user1 = User.RegisterUser("fdshhjk@dsa.das", password, "name", "surname");
+        User user2 = User.RegisterUser("fdshhjk@dsa.das", password, "name", "surname");
+
+        Assert.False(user1.Password == user2.Password);
+    }
+    [Fact]
+    public void HashVerificationTest_wrongPassword()
     {
         const string rightPassword = "%klfdhuyu*7sjk";
         const string wrongPassword = "KdjhgvnNG4477/";
 
         User user = User.RegisterUser("fdshhjk@dsa.das", rightPassword, "name", "surname");
 
-        // Hashed password verification should be successful with right password
-        Assert.True(user.VerifyHashedPassword(rightPassword));
         // Hashed password verification should be failed with wrong password
         Assert.False(user.VerifyHashedPassword(wrongPassword));
+    }
+    [Fact]
+    public void HashVerificationTest_rightPassword()
+    {
+        const string rightPassword = "djihg&*%$3bhjk/";
+
+        User user = User.RegisterUser("fdshhjk@dsa.das", rightPassword, "name", "surname");
+
+        Assert.True(user.VerifyHashedPassword(rightPassword));
     }
     [Fact]
     public void ChangePasswordTest()
@@ -36,14 +53,25 @@ public class UserModelTest
 
         User user = User.RegisterUser("fdshhjk@dsa.das", oldPassword, "name", "surname");
 
-        Assert.True(user.VerifyHashedPassword(oldPassword));
-
         user.ChangePassword(oldPassword, newPassword);
 
         // Hashed password verification should be failed when password changed
         Assert.False(user.VerifyHashedPassword(oldPassword));
         // Hashed password verification should be successful with new password after changing
         Assert.True(user.VerifyHashedPassword(newPassword));
+    }
+    [Fact]
+    public void ChangePassword_wrongPassword()
+    {
+        const string oldPassword = "fdsjniy*^Gdas";
+        const string newPassword = "dsaui^&Gvueqw";
+
+        User user = User.RegisterUser("fdshhjk@dsa.das", oldPassword, "name", "surname");
+
+        user.ChangePassword(newPassword, newPassword);
+
+        Assert.True(user.VerifyHashedPassword(oldPassword));
+        Assert.False(user.VerifyHashedPassword(newPassword));
     }
     [Fact]
     public void GuidGenerationTest()
