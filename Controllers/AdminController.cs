@@ -1,10 +1,7 @@
-using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using CourseWork.Models;
 using Microsoft.AspNetCore.Authorization;
 using CourseWork.Data;
-using System.Linq;
-using System.Security.Claims;
 using Microsoft.EntityFrameworkCore;
 using CourseWork.ViewModels;
 

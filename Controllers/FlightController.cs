@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
 using CourseWork.ViewModels;
 using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
 
 namespace CourseWork.Controllers;
 

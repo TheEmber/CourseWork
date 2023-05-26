@@ -1,5 +1,3 @@
-using CourseWork.Models;
-
 namespace CourseWork.Interfaces;
 
 public interface IHashable
