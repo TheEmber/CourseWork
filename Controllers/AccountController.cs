@@ -36,6 +36,9 @@ public class AccountController : Controller
 
                 _context.Users.Add(user);
                 await _context.SaveChangesAsync();
+                user = await _context.Users
+                .Include(u => u.Role)
+                .SingleOrDefaultAsync(u => u.Email == user.Email);
 
                 await Authenticate(user);
 
