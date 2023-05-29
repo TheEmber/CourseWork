@@ -45,20 +45,24 @@ public class FlightController : Controller
     }
     [HttpPost]
     [Authorize]
-    public async Task<IActionResult> Payment(string id, List<int> selectedSeatsInput)
+    public async Task<IActionResult> Payment(string id, string selectedSeatsInput)
     {
-        if(selectedSeatsInput.Count != 0 && selectedSeatsInput != null)
+        if(selectedSeatsInput.Count() != 0 && selectedSeatsInput != null)
         {
+            List<int> SelectedSeats = selectedSeatsInput.Split(',')
+                         .Select(int.Parse)
+                         .ToList();
+
             Flight flight = await _context.Flights
             .Include(f => f.Tickets)
             .SingleOrDefaultAsync(f => f.ID == Guid.Parse(id));
-            FlightViewModel model = new(flight, selectedSeatsInput);
+            FlightViewModel model = new(flight, SelectedSeats);
             if (flight.DepartureDate < DateTime.Now)
             {
                 TempData["ErrorMessage"] = "Бронювання квитків на вже початий рейс недоступне";
                 return RedirectToAction("Details", new { FlightId = Guid.Parse(id) });
             }
-            foreach (Ticket ticket in flight.GetSelectedTickets(selectedSeatsInput))
+            foreach (Ticket ticket in flight.GetSelectedTickets(SelectedSeats))
             {
             if(ticket.BookedBy != null)
                 {

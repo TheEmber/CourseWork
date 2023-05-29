@@ -1,37 +1,38 @@
 @{
-    ViewData["Title"] = "Рейси";
+ViewData["Title"] = "Рейси";
 }
 
 @model List<FlightWithCount>
 
-<div class="container">
-    <h1 class="text-center my-4">Квитки</h1>
-    <input class="form-control mb-3" id="searchInput" type="text" placeholder="Шукати квитки..." oninput="filterFlights()">
+    <div class="container">
+        <h1 class="text-center my-4">Квитки</h1>
+        <input class="form-control mb-3" id="searchInput" type="text" placeholder="Шукати квитки..."
+            oninput="filterFlights()">
 
-    <div class="mb-3">
-        <label for="sortSelect" class="form-label">Сортувати за:</label>
-        <select class="form-select" id="sortSelect" onchange="sortFlights()">
-            <option value="arrival">Час прибуття</option>
-            <option value="departure">Час відправлення</option>
-            <option value="price">Ціна</option>
-        </select>
-    </div>
+        <div class="mb-3">
+            <label for="sortSelect" class="form-label">Сортувати за:</label>
+            <select class="form-select" id="sortSelect" onchange="sortFlights()">
+                <option value="arrival">Час прибуття</option>
+                <option value="departure">Час відправлення</option>
+                <option value="price">Ціна</option>
+            </select>
+        </div>
 
-    <table class="table table-bordered table-striped">
-        <thead>
-            <tr>
-                <th>Відправляється з</th>
-                <th>Прямує до</th>
-                <th>Ціна</th>
-                <th>Відправляється</th>
-                <th>Прибуває</th>
-                <th>Кількість квитків</th>
-                <th>Дії</th>
-            </tr>
-        </thead>
-        <tbody id="flightTable">
-            @foreach (var flight in Model)
-            {
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>Відправляється з</th>
+                    <th>Прямує до</th>
+                    <th>Ціна</th>
+                    <th>Відправляється</th>
+                    <th>Прибуває</th>
+                    <th>Кількість квитків</th>
+                    <th>Дії</th>
+                </tr>
+            </thead>
+            <tbody id="flightTable">
+                @foreach (var flight in Model)
+                {
                 <tr>
                     <td>@flight.Source</td>
                     <td>@flight.Destination</td>
@@ -39,48 +40,54 @@
                     <td>@flight.DepartureDate.ToString("dd/MM/yyyy HH:mm")</td>
                     <td>@flight.ArrivalDate.ToString("dd/MM/yyyy HH:mm")</td>
                     <td>@flight.TicketCount</td>
-                    <form action="@Url.Action("Details", "Flight")" method="get">
+                    <form action="@Url.Action("Details", "Flight" )" method="get">
                         <input type="hidden" name="FlightId" value="@flight.ID" />
                         <td>
                             <button type="submit" class="btn btn-primary">Забронювати</button>
                         </td>
                     </form>
                 </tr>
-            }
-        </tbody>
-    </table>
-</div>
+                }
+            </tbody>
+        </table>
+    </div>
 
-@section Scripts {
+    @section Scripts {
     <script>
         function filterFlights() {
             let input = document.getElementById("searchInput");
             let filter = input.value.toUpperCase();
-            let table = document.getElementById("ticketTable");
+            let table = document.getElementById("flightTable");
             let tr = table.getElementsByTagName("tr");
-
+            let filterValues = filter.split(" "); // Split filter input into source and destination values
             for (let i = 0; i < tr.length; i++) {
                 let source = tr[i].getElementsByTagName("td")[0];
                 let destination = tr[i].getElementsByTagName("td")[1];
-
                 if (source || destination) {
                     let sourceText = source.textContent || source.innerText;
                     let destinationText = destination.textContent || destination.innerText;
-
-                    if (sourceText.toUpperCase().indexOf(filter) > -1 || destinationText.toUpperCase().indexOf(filter) > -1) {
+                    let isMatched = true; // Flag to track if both source and destination match
+                    for (let j = 0; j < filterValues.length; j++) {
+                        let filterValue = filterValues[j].trim();
+                        if (sourceText.toUpperCase().indexOf(filterValue) === -1 && destinationText.toUpperCase()
+                            .indexOf(filterValue) === -1) {
+                            isMatched = false;
+                            break; // Break loop if any filter value doesn't match
+                        }
+                    }
+                    if (isMatched) {
                         tr[i].style.display = "";
                     } else {
                         tr[i].style.display = "none";
                     }
                 }
             }
-        }
+        };
 
         function sortFlights() {
             let sortBy = document.getElementById("sortSelect").value;
-            let table = document.getElementById("ticketTable");
+            let table = document.getElementById("flightTable");
             let rows = Array.from(table.rows);
-
             let comparator;
             if (sortBy === "arrival") {
                 comparator = (a, b) => new Date(a.cells[4].innerText) - new Date(b.cells[4].innerText);
@@ -89,9 +96,26 @@
             } else {
                 comparator = (a, b) => parseFloat(a.cells[2].innerText) - parseFloat(b.cells[2].innerText);
             }
-
             rows.slice(1).sort(comparator).forEach(row => table.appendChild(row));
         }
+        window.onload = function() {
+            var searchParam = new URLSearchParams(window.location.search).get("search");
+            if (searchParam) {
+                var searchValues = decodeURIComponent(searchParam).split("|");
+                var fromValue = searchValues[0];
+                var toValue = searchValues[1];
+                document.getElementById("searchInput").value = fromValue + " " + toValue;
+            }
+        };
+        window.onload = function() {
+            var searchParam = new URLSearchParams(window.location.search).get("search");
+            if (searchParam) {
+                var searchValues = decodeURIComponent(searchParam).split("|");
+                var fromValue = searchValues[0];
+                var toValue = searchValues[1];
+                document.getElementById("searchInput").value = fromValue + " " + toValue;
+            }
+            filterFlights(); // Update table on window load
+        };
     </script>
-}
-
+    }

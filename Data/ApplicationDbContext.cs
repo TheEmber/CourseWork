@@ -21,7 +21,7 @@ public class ApplicationDbContext : DbContext
         base.OnModelCreating(modelBuilder);
 
         modelBuilder.Entity<Ticket>()
-            .HasKey(t => t.Seat);
+            .HasKey(t => new { t.Seat, t.FlightID });
 
         modelBuilder.Entity<Ticket>()
             .HasOne(t => t.Flight)
