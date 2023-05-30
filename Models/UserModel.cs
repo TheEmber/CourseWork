@@ -97,21 +97,7 @@ public class User : IHashable
         if (array1.Length != array2.Length)
             return false;
 
-        foreach (byte b in array1)
-        {
-            bool found = false;
-            foreach (byte c in array2)
-            {
-                if(b == c)
-                {
-                    found = true;
-                    break;
-                }
-            }
-            if(!found)
-                return false;
-        }
-        return true;
+        return array1.SequenceEqual(array2);
     }
     public void ChangePassword(string oldPassword, string newPassword)
     {
