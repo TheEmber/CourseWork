@@ -35,7 +35,7 @@
                             <button type="submit" class="btn btn-primary">Змінити роль</button>
                         </td>
                     </form>
-                    <form action="@Url.Action("DeleteUser", "Admin")" method="get">
+                    <form action="@Url.Action("DeleteUser", "Admin")" method="post">
                         <input type="hidden" name="UserId" value="@user.ID" />
                         <td>
                             <button type="submit" class="btn btn-primary">Видалити</button>

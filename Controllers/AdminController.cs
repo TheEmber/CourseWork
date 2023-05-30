@@ -180,9 +180,9 @@ public class AdminController : Controller
         return View(model);
     }
     [HttpPost]
-    public async Task<IActionResult> DeleteUser(Guid id)
+    public async Task<IActionResult> DeleteUser(Guid UserId)
     {
-        var user = await _context.Users.FindAsync(id);
+        var user = await _context.Users.FindAsync(UserId);
         if (user == null)
         {
             return NotFound();
@@ -194,21 +194,21 @@ public class AdminController : Controller
         return RedirectToAction(nameof(UserManagement));
     }
     [HttpPost]
-    public async Task<IActionResult> ChangeUserRole(Guid userId, int roleId)
+    public async Task<IActionResult> ChangeUserRole(Guid UserId, int RoleId)
     {
-        var user = await _context.Users.FindAsync(userId);
+        var user = await _context.Users.FindAsync(UserId);
         if (user == null)
         {
             return NotFound();
         }
 
-        var role = await _context.Roles.FindAsync(roleId);
+        var role = await _context.Roles.FindAsync(RoleId);
         if (role == null)
         {
             return NotFound();
         }
 
-        user.RoleID = roleId;
+        user.RoleID = RoleId;
         _context.Update(user);
         await _context.SaveChangesAsync();
 
