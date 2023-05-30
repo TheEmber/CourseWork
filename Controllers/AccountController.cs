@@ -118,7 +118,7 @@ public class AccountController : Controller
                 return RedirectToAction("Logout");
             }
         }
-        return View();
+        return RedirectToAction("Details", "Account");
     }
     public async Task<IActionResult> Logout()
     {
