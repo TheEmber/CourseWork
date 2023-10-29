@@ -28,3 +28,18 @@ jobs:
           path: TestResults-${{ matrix.dotnet-version }}
         # Use always() to always run this step to publish test results when there are test failures
         if: ${{ always() }}
+  deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up SSH
+      uses: webfactory/ssh-agent@v0.5.5
+      with:
+        ssh-private-key: ${{ secret.SSH_KEY }}
+
+    - name: SSH to machine and deploy
+      run: |
+        ssh ${{ secret.SSH_USERNAME }}@${{ secret.SSH_IP }} "cd $ && touch test"
