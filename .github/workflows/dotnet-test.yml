@@ -43,7 +43,9 @@ jobs:
 
     - name: Add server to known hosts
       run: |
-        echo "$SSH_IP" | xargs -I % ssh-keyscan -H % >> $HOME/.ssh/known_hosts
+        echo "$SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
+      env:
+        SSH_KNOWN_HOSTS: ${{ secrets.SSH_KNOWN_HOST }}
 
     - name: SSH to machine and deploy
       run: |
