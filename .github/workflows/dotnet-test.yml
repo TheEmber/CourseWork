@@ -38,8 +38,8 @@ jobs:
     - name: Set up SSH
       uses: webfactory/ssh-agent@v0.5.5
       with:
-        ssh-private-key: ${{ secret.SSH_KEY }}
+        ssh-private-key: ${{ secrets.SSH_KEY }}
 
     - name: SSH to machine and deploy
       run: |
-        ssh ${{ secret.SSH_USERNAME }}@${{ secret.SSH_IP }} "cd $ && touch test"
+        ssh ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_IP }} "cd $ && touch test"
