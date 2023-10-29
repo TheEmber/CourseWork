@@ -43,4 +43,4 @@ jobs:
 
     - name: SSH to machine and deploy
       run: |
-        ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_IP }} "cd $ && touch test"
+        ssh ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_IP }} "cd $ && touch test"
