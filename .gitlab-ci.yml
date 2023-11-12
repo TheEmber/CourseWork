@@ -48,7 +48,7 @@ unit-test-job:   # This job runs in the test stage.
     - build-job
   artifacts:
     paths:
-      - TestResult/
+      - TestResults/
     untracked: false
     when: on_success
     expire_in: 30 days
