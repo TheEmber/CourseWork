@@ -1,52 +1,21 @@
-name: dotnet package
+stages:
+  - build
 
-on:
-  push:
-    branches:
-      - master
+variables:
+  DOTNET_VERSION: '6.0.x'
 
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        dotnet-version: ['6.0.x']
-    steps:
-      - uses: actions/checkout@v3
-      - name: Setup dotnet
-        uses: actions/setup-dotnet@v3
-        with:
-          dotnet-version: ${{ matrix.dotnet-version }}
-      - name: Install dependencies
-        run: dotnet restore
-      - name: Test with dotnet
-        run: dotnet test --logger trx --results-directory "TestResults-${{ matrix.dotnet-version }}"
-      - name: Upload dotnet test results
-        uses: actions/upload-artifact@v3
-        with:
-          name: dotnet-results-${{ matrix.dotnet-version }}
-          path: TestResults-${{ matrix.dotnet-version }}
-        # Use always() to always run this step to publish test results when there are test failures
-        if: ${{ always() }}
-  # deploy:
-  #   runs-on: ubuntu-latest
-  #   needs: build
-    
-  #   steps:
-  #   - name: Checkout code
-  #     uses: actions/checkout@v3
+before_script:
+  - apt-get update -qy
+  - apt-get install -y apt-transport-https ca-certificates curl software-properties-common
+  - export DOTNET_SKIP_FIRST_TIME_EXPERIENCE=1
+  - export DOTNET_CLI_TELEMETRY_OPTOUT=1
 
-  #   - name: Set up SSH
-  #     uses: webfactory/ssh-agent@v0.7.0
-  #     with:
-  #       ssh-private-key: ${{ secrets.SSH_KEY }}
-
-  #   - name: Add server to known hosts
-  #     run: |
-  #       echo "$SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
-  #     env:
-  #       SSH_KNOWN_HOSTS: ${{ secrets.SSH_KNOWN_HOST }}
-
-  #   - name: SSH to machine and deploy
-  #     run: |
-  #       ssh ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_IP }} "sudo bash /app/deploy.sh"
+build:
+  stage: build
+  script:
+    - apt-get install -y dotnet-sdk-${DOTNET_VERSION}
+    - dotnet restore
+    - dotnet test --logger trx --results-directory "TestResults-${DOTNET_VERSION}"
+  artifacts:
+    paths:
+      - TestResults-${DOTNET_VERSION}
