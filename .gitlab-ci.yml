@@ -23,7 +23,7 @@ stages:          # List of stages for jobs, and their order of execution
 
 
 variables:
-  DOTNET_VERSION: '6.0.x'
+  DOTNET_VERSION: '6.0'
 
 
 before_script:
