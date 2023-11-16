@@ -43,7 +43,7 @@ unit-test-job:   # This job runs in the test stage.
   stage: test    # It only starts when the job in the build stage completes successfully.
   script:
     - dotnet restore
-    - dotnet clear
+    - dotnet clean
     - dotnet test Tests/ --collect="XPlat Code Coverage" --logger:"junit;LogFilePath=TestResults/testresult.xml"
   dependencies:
     - build-job
