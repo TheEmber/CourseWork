@@ -53,6 +53,8 @@ unit-test-job:   # This job runs in the test stage.
     untracked: false
     when: on_success
     expire_in: 30 days
+    reports:
+      junit: Tests/TestResults/testresult.xml
 
 
 # lint-test-job:   # This job also runs in the test stage.
