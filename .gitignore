@@ -7,3 +7,5 @@ out
 bin
 obj
 Migrations
+testresult.xml
+TestResults

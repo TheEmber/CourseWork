@@ -1,8 +1,10 @@
 using CourseWork;
 using Xunit;
 using Microsoft.AspNetCore.Mvc.Testing;
-
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Hosting;
 namespace CourseWork.Tests;
+using System;
 
 public class BasicTests
     : IClassFixture<WebApplicationFactory<Program>>

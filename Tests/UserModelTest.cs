@@ -1,5 +1,6 @@
 using CourseWork.Models;
 using Xunit;
+using System;
 
 namespace CourseWork.Tests;
 public class UserModelTest
