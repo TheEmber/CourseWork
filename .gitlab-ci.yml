@@ -43,12 +43,13 @@ unit-test-job:   # This job runs in the test stage.
   stage: test    # It only starts when the job in the build stage completes successfully.
   script:
     - dotnet restore
-    - dotnet test --logger trx --results-directory "TestResults"
+    - dotnet clear
+    - dotnet test Tests/ --collect="XPlat Code Coverage" --logger:"junit;LogFilePath=TestResults/testresult.xml"
   dependencies:
     - build-job
   artifacts:
     paths:
-      - TestResults/
+      - Tests/TestResults/
     untracked: false
     when: on_success
     expire_in: 30 days
